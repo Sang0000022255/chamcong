@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu mã nhân viên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tra cứu mã nhân viên</h1>
+        <div class="form-group">
+            <label for="employeeId">Nhập mã nhân viên:</label>
+            <input type="text" id="employeeId" placeholder="VD: NV001">
+        </div>
+        <button onclick="lookupEmployee()">Tra cứu</button>
+        <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+    </div>
+
+    <script>
+        const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; // Thay <username> bằng tên GitHub của bạn
+
+        let employees = {};
+
+        // Lấy dữ liệu từ GitHub
+        async function fetchEmployeeData() {
+            try {
+                const response = await fetch(employeeDataUrl);
+                employees = await response.json();
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu:", error);
+                alert("Không thể tải dữ liệu nhân viên.");
+            }
+        }
+
+        // Tra cứu nhân viên
+        function lookupEmployee() {
+            const employeeId = document.getElementById("employeeId").value.trim();
+            const employee = employees[employeeId];
+
+            const resultDiv = document.getElementById("result");
+            if (employee) {
+                resultDiv.innerHTML = `Chào ${employee.name}!`;
+            } else {
+                resultDiv.innerHTML = "Mã nhân viên không tồn tại.";
+            }
+        }
+
+        // Tải dữ liệu khi trang được mở
+        fetchEmployeeData();
+    </script>
+</body>
+</html>
