@@ -51,6 +51,16 @@
         button:hover {
             background-color: #0056b3;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -63,7 +73,7 @@
         <button onclick="lookupEmployee()">Tra cứu</button>
         <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
-    
+
     <div id="overtimeEntry" style="margin-top: 20px; display: none;">
         <h2>Thêm giờ tăng ca</h2>
         <div class="form-group">
@@ -79,7 +89,7 @@
 
     <div id="overtimeTableContainer" style="margin-top: 20px; display: none;">
         <h2>Thông tin giờ tăng ca</h2>
-        <table id="overtimeTable" border="1" style="width: 100%; text-align: left;">
+        <table id="overtimeTable">
             <thead>
                 <tr>
                     <th>Ngày</th>
@@ -94,9 +104,10 @@
     </div>
 
     <script>
-        const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; 
+        const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; // Đường dẫn đến dữ liệu nhân viên
 
         let employees = {};
+        let overtimeRecords = [];
 
         // Lấy dữ liệu từ GitHub
         async function fetchEmployeeData() {
@@ -109,7 +120,7 @@
             }
         }
 
-        // Tra cứu nhân viên và hiển thị form thêm giờ tăng ca
+        // Tra cứu nhân viên
         function lookupEmployee() {
             const employeeId = document.getElementById("employeeId").value.trim();
             const employee = employees[employeeId];
@@ -125,9 +136,6 @@
                 document.getElementById("overtimeTableContainer").style.display = "none";
             }
         }
-
-        // Biến lưu trữ thông tin giờ tăng ca
-        let overtimeRecords = [];
 
         // Thêm giờ tăng ca vào danh sách
         function addOvertime() {
@@ -159,10 +167,7 @@
 
             overtimeRecords.forEach(record => {
                 const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${record.date}</td>
-                    <td>${record.hours}</td>
-                `;
+                row.innerHTML = `<td>${record.date}</td><td>${record.hours}</td>`;
                 tableBody.appendChild(row);
                 totalHours += record.hours;
             });
