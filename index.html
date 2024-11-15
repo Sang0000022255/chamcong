@@ -168,6 +168,129 @@
             // Hiển thị tổng số giờ
             document.getElementById("totalOvertime").textContent = `Tổng số giờ tăng ca: ${totalHours}`;
         }
+const githubToken = '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';  // Thay YOUR_GITHUB_TOKEN bằng token của bạn
+const repoOwner = 'Sang0000022255';  // Tên người sở hữu repo GitHub
+const repoName = 'chamcong';  // Tên repo GitHub
+const filePath = 'word_records.json';  // Đường dẫn đến tệp dữ liệu
+
+let overtimeRecords = [];
+
+// Lấy dữ liệu giờ tăng ca từ GitHub
+async function loadOvertimeData() {
+    const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+    const headers = {
+        "Authorization": `Bearer ${githubToken}`,
+        "Accept": "application/vnd.github.v3.raw"
+    };
+
+    try {
+        const response = await fetch(url, { headers });
+        if (response.ok) {
+            const data = await response.json();
+            overtimeRecords = data ? JSON.parse(atob(data.content)) : [];
+            updateOvertimeTable();
+        } else {
+            console.error('Không thể lấy dữ liệu từ GitHub');
+        }
+    } catch (error) {
+        console.error("Lỗi khi tải dữ liệu giờ tăng ca:", error);
+    }
+}
+
+// Lưu dữ liệu giờ tăng ca lên GitHub
+async function saveOvertimeData() {
+    const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+    const headers = {
+        "Authorization": `Bearer ${githubToken}`,
+        "Accept": "application/vnd.github.v3+json"
+    };
+
+    const data = {
+        message: "Cập nhật giờ tăng ca",
+        committer: {
+            name: "Tên người gửi",
+            email: "email@example.com"
+        },
+        content: btoa(JSON.stringify(overtimeRecords)),
+        sha: await getFileSHA() // Lấy SHA của tệp hiện tại để cập nhật tệp
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            console.log("Cập nhật dữ liệu thành công.");
+            alert("Dữ liệu đã được lưu.");
+        } else {
+            console.error("Không thể lưu dữ liệu lên GitHub.");
+        }
+    } catch (error) {
+        console.error("Lỗi khi lưu dữ liệu:", error);
+    }
+}
+
+// Lấy SHA của tệp hiện tại
+async function getFileSHA() {
+    const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+    const headers = {
+        "Authorization": `Bearer ${githubToken}`
+    };
+
+    const response = await fetch(url, { headers });
+    const data = await response.json();
+    return data.sha;
+}
+
+// Cập nhật bảng hiển thị giờ tăng ca
+function updateOvertimeTable() {
+    const tableBody = document.querySelector("#overtimeTable tbody");
+    tableBody.innerHTML = "";
+
+    let totalHours = 0;
+
+    overtimeRecords.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${record.date}</td>
+            <td>${record.hours}</td>
+        `;
+        tableBody.appendChild(row);
+        totalHours += record.hours;
+    });
+
+    // Hiển thị tổng số giờ
+    document.getElementById("totalOvertime").textContent = `Tổng số giờ tăng ca: ${totalHours}`;
+}
+
+// Khi thêm giờ tăng ca
+function addOvertime() {
+    const date = document.getElementById("overtimeDate").value;
+    const hours = parseFloat(document.getElementById("overtimeHours").value);
+
+    if (!date || isNaN(hours) || hours < 0) {
+        alert("Vui lòng nhập ngày và số giờ hợp lệ.");
+        return;
+    }
+
+    overtimeRecords.push({ date, hours });
+
+    // Làm rỗng các ô nhập liệu
+    document.getElementById("overtimeDate").value = "";
+    document.getElementById("overtimeHours").value = "";
+
+    // Cập nhật bảng và tổng số giờ
+    updateOvertimeTable();
+
+    // Lưu dữ liệu lên GitHub
+    saveOvertimeData();
+}
+
+// Tải dữ liệu khi trang được mở
+loadOvertimeData();
 
         // Tải dữ liệu khi trang được mở
         fetchEmployeeData();
