@@ -189,11 +189,11 @@ const githubToken = "<github_pat_11BC4UEKI0ctyJwyusgOOU_qvTlEfqQfk1GYGYx61GDdEQZ
 
 // Lấy dữ liệu từ GitHub
 async function fetchWorkRecords() {
-    const url = `https://api.github.com/repos/${githubUsername}/${githubRepo}/contents/${filePath}`;
+    const url = `https://api.github.com/repos/Sang0000022255/chamcong/contents/work_records.json`;
     try {
         const response = await fetch(url, {
             headers: {
-                Authorization: `token ${githubToken}`
+                Authorization: `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`
             }
         });
 
@@ -212,7 +212,7 @@ async function fetchWorkRecords() {
 
 // Ghi dữ liệu lên GitHub
 async function saveWorkRecords() {
-    const url = `https://api.github.com/repos/${githubUsername}/${githubRepo}/contents/${filePath}`;
+    const url = `https://api.github.com/repos/Sang0000022255/chamcong/contents/work_records.json`;
     try {
         // Encode dữ liệu thành Base64
         const content = btoa(JSON.stringify(workRecords, null, 2));
@@ -220,7 +220,7 @@ async function saveWorkRecords() {
         // Lấy SHA hiện tại của tệp
         const response = await fetch(url, {
             headers: {
-                Authorization: `token ${githubToken}`
+                Authorization: `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`
             }
         });
         const fileData = await response.json();
