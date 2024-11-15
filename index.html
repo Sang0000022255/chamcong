@@ -180,7 +180,6 @@ function updateOvertimeTable() {
     // Hiển thị tổng số giờ
     document.getElementById("totalOvertime").textContent = Tổng số giờ tăng ca: ${totalHours};
 }
-// Biến lưu trữ thông tin giờ làm
 let workRecords = [];
 const githubRepo = "chamcong"; // Tên repository của bạn
 const filePath = "work_records.json"; // Đường dẫn tệp JSON
@@ -189,11 +188,11 @@ const githubToken = "<github_pat_11BC4UEKI0ctyJwyusgOOU_qvTlEfqQfk1GYGYx61GDdEQZ
 
 // Lấy dữ liệu từ GitHub
 async function fetchWorkRecords() {
-    const url = https://api.github.com/repos/Sang0000022255/chamcong/contents/work_records.json;
+    const url = `https://api.github.com/repos/${githubUsername}/${githubRepo}/contents/${filePath}`;
     try {
         const response = await fetch(url, {
             headers: {
-                Authorization: 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
+                Authorization: `token ${githubToken}`
             }
         });
 
@@ -212,7 +211,7 @@ async function fetchWorkRecords() {
 
 // Ghi dữ liệu lên GitHub
 async function saveWorkRecords() {
-    const url = https://api.github.com/repos/Sang0000022255/chamcong/contents/work_records.json;
+    const url = `https://api.github.com/repos/${githubUsername}/${githubRepo}/contents/${filePath}`;
     try {
         // Encode dữ liệu thành Base64
         const content = btoa(JSON.stringify(workRecords, null, 2));
@@ -220,7 +219,7 @@ async function saveWorkRecords() {
         // Lấy SHA hiện tại của tệp
         const response = await fetch(url, {
             headers: {
-                Authorization: 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
+                Authorization: `token ${githubToken}`
             }
         });
         const fileData = await response.json();
@@ -229,7 +228,7 @@ async function saveWorkRecords() {
         await fetch(url, {
             method: "PUT",
             headers: {
-                Authorization: token ${githubToken},
+                Authorization: `token ${githubToken}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -281,21 +280,21 @@ function updateWorkTable() {
     workRecords.forEach(record => {
         const total = record.workHours + record.overtimeHours;
         const row = document.createElement("tr");
-        row.innerHTML = 
+        row.innerHTML = `
             <td>${record.date}</td>
             <td>${record.workHours}</td>
             <td>${record.overtimeHours}</td>
             <td>${total}</td>
-        ;
+        `;
         tableBody.appendChild(row);
 
         totalWork += record.workHours;
         totalOvertime += record.overtimeHours;
     });
 
-    document.getElementById("totalWork").textContent = Tổng giờ làm chính: ${totalWork};
-    document.getElementById("totalOvertime").textContent = Tổng giờ tăng ca: ${totalOvertime};
-    document.getElementById("grandTotal").textContent = Tổng tất cả giờ: ${totalWork + totalOvertime};
+    document.getElementById("totalWork").textContent = `Tổng giờ làm chính: ${totalWork}`;
+    document.getElementById("totalOvertime").textContent = `Tổng giờ tăng ca: ${totalOvertime}`;
+    document.getElementById("grandTotal").textContent = `Tổng tất cả giờ: ${totalWork + totalOvertime}`;
 }
 
 // Tải dữ liệu khi trang được mở
