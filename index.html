@@ -1,187 +1,72 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tra cứu mã nhân viên</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tìm kiếm nhân viên</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .form-container {
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 200px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Tra cứu mã nhân viên</h1>
-        <div class="form-group">
-            <label for="employeeId">Nhập mã nhân viên:</label>
-            <input type="text" id="employeeId" placeholder="VD: NV001">
-        </div>
-        <button onclick="lookupEmployee()">Tra cứu</button>
-        <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
-    </div>
- <div id="overtimeEntry" style="margin-top: 20px; display: none;">
-    <h2>Thêm giờ tăng ca</h2>
-    <div class="form-group">
-        <label for="overtimeDate">Chọn ngày:</label>
-        <input type="date" id="overtimeDate">
-    </div>
-    <div class="form-group">
-        <label for="overtimeHours">Số giờ tăng ca:</label>
-        <input type="number" id="overtimeHours" min="0" placeholder="Nhập số giờ">
-    </div>
-    <button onclick="addOvertime()">Thêm giờ tăng ca</button>
-</div>
-<div id="overtimeTableContainer" style="margin-top: 20px; display: none;">
-    <h2>Thông tin giờ tăng ca</h2>
-    <table id="overtimeTable" border="1" style="width: 100%; text-align: left;">
-        <thead>
-            <tr>
-                <th>Ngày</th>
-                <th>Số giờ tăng ca</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Nội dung sẽ được thêm bằng JavaScript -->
-        </tbody>
-    </table>
-    <h3 id="totalOvertime">Tổng số giờ tăng ca: 0</h3>
-</div>
 
-    <script>
-        const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; // Thay <username> bằng tên GitHub của bạn
+  <h1>Tìm kiếm thông tin nhân viên</h1>
+  
+  <div class="form-container">
+    <label for="search-input">Nhập tên hoặc mã nhân viên:</label>
+    <input type="text" id="search-input" placeholder="Tên hoặc mã nhân viên">
+    <button onclick="searchEmployee()">Tìm kiếm</button>
+  </div>
+  
+  <div id="result"></div>
 
-        let employees = {};
+  <script>
+    const employees = [
+      { name: "Nguyễn Văn A", code: "NV001", position: "Nhân viên" },
+      { name: "Trần Thị B", code: "NV002", position: "Quản lý" },
+      { name: "Lê Minh C", code: "NV003", position: "Giám đốc" },
+      // Thêm dữ liệu nhân viên vào đây
+    ];
 
-        // Lấy dữ liệu từ GitHub
-        async function fetchEmployeeData() {
-            try {
-                const response = await fetch(employeeDataUrl);
-                employees = await response.json();
-            } catch (error) {
-                console.error("Lỗi khi tải dữ liệu:", error);
-                alert("Không thể tải dữ liệu nhân viên.");
-            }
-        }
-
-        // Tra cứu nhân viên
-        function lookupEmployee() {
-            const employeeId = document.getElementById("employeeId").value.trim();
-            const employee = employees[employeeId];
-
-            const resultDiv = document.getElementById("result");
-            if (employee) {
-                resultDiv.innerHTML = Chào ${employee.name}!;
-            } else {
-                resultDiv.innerHTML = "Mã nhân viên không tồn tại.";
-            }
-        }
-// Biến lưu trữ thông tin giờ tăng ca
-let overtimeRecords = [];
-
-// Hiển thị form thêm giờ tăng ca sau khi tra cứu thành công
-function lookupEmployee() {
-    const employeeId = document.getElementById("employeeId").value.trim();
-    const employee = employees[employeeId];
-
-    const resultDiv = document.getElementById("result");
-    if (employee) {
-        resultDiv.innerHTML = Chào ${employee.name}! Vui lòng thêm giờ tăng ca.;
-        document.getElementById("overtimeEntry").style.display = "block";
-        document.getElementById("overtimeTableContainer").style.display = "block";
-    } else {
-        resultDiv.innerHTML = "Mã nhân viên không tồn tại.";
-        document.getElementById("overtimeEntry").style.display = "none";
-        document.getElementById("overtimeTableContainer").style.display = "none";
-    }
-}
-
-// Thêm giờ tăng ca vào danh sách
-function addOvertime() {
-    const date = document.getElementById("overtimeDate").value;
-    const hours = parseFloat(document.getElementById("overtimeHours").value);
-
-    if (!date || isNaN(hours) || hours < 0) {
-        alert("Vui lòng nhập ngày và số giờ hợp lệ.");
-        return;
+    function searchEmployee() {
+      const query = document.getElementById('search-input').value.trim().toLowerCase();
+      const result = employees.filter(employee =>
+        employee.name.toLowerCase().includes(query) || employee.code.toLowerCase().includes(query)
+      );
+      
+      displayResult(result);
     }
 
-    // Thêm thông tin vào danh sách
-    overtimeRecords.push({ date, hours });
+    function displayResult(result) {
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+      
+      if (result.length > 0) {
+        result.forEach(employee => {
+          const employeeInfo = `<p><strong>${employee.name}</strong> (${employee.code}) - ${employee.position}</p>`;
+          resultDiv.innerHTML += employeeInfo;
+        });
+      } else {
+        resultDiv.innerHTML = '<p>Không tìm thấy nhân viên.</p>';
+      }
+    }
+  </script>
 
-    // Làm rỗng các ô nhập liệu
-    document.getElementById("overtimeDate").value = "";
-    document.getElementById("overtimeHours").value = "";
-
-    // Cập nhật bảng và tổng số giờ
-    updateOvertimeTable();
-}
-
-// Cập nhật bảng hiển thị giờ tăng ca
-function updateOvertimeTable() {
-    const tableBody = document.querySelector("#overtimeTable tbody");
-    tableBody.innerHTML = "";
-
-    let totalHours = 0;
-
-    overtimeRecords.forEach(record => {
-        const row = document.createElement("tr");
-        row.innerHTML = 
-            <td>${record.date}</td>
-            <td>${record.hours}</td>
-        ;
-        tableBody.appendChild(row);
-        totalHours += record.hours;
-    });
-
-    // Hiển thị tổng số giờ
-    document.getElementById("totalOvertime").textContent = Tổng số giờ tăng ca: ${totalHours};
-}
-        // Tải dữ liệu khi trang được mở
-        fetchEmployeeData();
-    </script>
 </body>
 </html>
