@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tra cứu mã nhân viên</title>
@@ -64,7 +63,7 @@
         <button onclick="lookupEmployee()">Tra cứu</button>
         <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
-<div id="overtimeEntry" style="margin-top: 20px; display: none;">
+ <div id="overtimeEntry" style="margin-top: 20px; display: none;">
     <h2>Thêm giờ tăng ca</h2>
     <div class="form-group">
         <label for="overtimeDate">Chọn ngày:</label>
@@ -91,12 +90,12 @@
     </table>
     <h3 id="totalOvertime">Tổng số giờ tăng ca: 0</h3>
 </div>
+
     <script>
         const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; // Thay <username> bằng tên GitHub của bạn
 
         let employees = {};
-<script>
-      
+
         // Lấy dữ liệu từ GitHub
         async function fetchEmployeeData() {
             try {
@@ -115,7 +114,7 @@
 
             const resultDiv = document.getElementById("result");
             if (employee) {
-                resultDiv.innerHTML = `Chào ${employee.name}!`;
+                resultDiv.innerHTML = Chào ${employee.name}!;
             } else {
                 resultDiv.innerHTML = "Mã nhân viên không tồn tại.";
             }
@@ -130,7 +129,7 @@ function lookupEmployee() {
 
     const resultDiv = document.getElementById("result");
     if (employee) {
-        resultDiv.innerHTML = `Chào ${employee.name}! Vui lòng thêm giờ tăng ca.`;
+        resultDiv.innerHTML = Chào ${employee.name}! Vui lòng thêm giờ tăng ca.;
         document.getElementById("overtimeEntry").style.display = "block";
         document.getElementById("overtimeTableContainer").style.display = "block";
     } else {
@@ -170,18 +169,17 @@ function updateOvertimeTable() {
 
     overtimeRecords.forEach(record => {
         const row = document.createElement("tr");
-        row.innerHTML = `
+        row.innerHTML = 
             <td>${record.date}</td>
             <td>${record.hours}</td>
-        `;
+        ;
         tableBody.appendChild(row);
         totalHours += record.hours;
     });
 
     // Hiển thị tổng số giờ
-    document.getElementById("totalOvertime").textContent = `Tổng số giờ tăng ca: ${totalHours}`;
+    document.getElementById("totalOvertime").textContent = Tổng số giờ tăng ca: ${totalHours};
 }
-
         // Tải dữ liệu khi trang được mở
         fetchEmployeeData();
     </script>
