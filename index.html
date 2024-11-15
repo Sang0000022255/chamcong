@@ -31,7 +31,7 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
-        input[type="text"], input[type="date"], input[type="number"] {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -51,16 +51,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table th, table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
     </style>
 </head>
 <body>
@@ -73,41 +63,38 @@
         <button onclick="lookupEmployee()">Tra cứu</button>
         <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
-
-    <div id="overtimeEntry" style="margin-top: 20px; display: none;">
-        <h2>Thêm giờ tăng ca</h2>
-        <div class="form-group">
-            <label for="overtimeDate">Chọn ngày:</label>
-            <input type="date" id="overtimeDate">
-        </div>
-        <div class="form-group">
-            <label for="overtimeHours">Số giờ tăng ca:</label>
-            <input type="number" id="overtimeHours" min="0" placeholder="Nhập số giờ">
-        </div>
-        <button onclick="addOvertime()">Thêm giờ tăng ca</button>
+ <div id="overtimeEntry" style="margin-top: 20px; display: none;">
+    <h2>Thêm giờ tăng ca</h2>
+    <div class="form-group">
+        <label for="overtimeDate">Chọn ngày:</label>
+        <input type="date" id="overtimeDate">
     </div>
-
-    <div id="overtimeTableContainer" style="margin-top: 20px; display: none;">
-        <h2>Thông tin giờ tăng ca</h2>
-        <table id="overtimeTable">
-            <thead>
-                <tr>
-                    <th>Ngày</th>
-                    <th>Số giờ tăng ca</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Nội dung sẽ được thêm bằng JavaScript -->
-            </tbody>
-        </table>
-        <h3 id="totalOvertime">Tổng số giờ tăng ca: 0</h3>
+    <div class="form-group">
+        <label for="overtimeHours">Số giờ tăng ca:</label>
+        <input type="number" id="overtimeHours" min="0" placeholder="Nhập số giờ">
     </div>
+    <button onclick="addOvertime()">Thêm giờ tăng ca</button>
+</div>
+<div id="overtimeTableContainer" style="margin-top: 20px; display: none;">
+    <h2>Thông tin giờ tăng ca</h2>
+    <table id="overtimeTable" border="1" style="width: 100%; text-align: left;">
+        <thead>
+            <tr>
+                <th>Ngày</th>
+                <th>Số giờ tăng ca</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Nội dung sẽ được thêm bằng JavaScript -->
+        </tbody>
+    </table>
+    <h3 id="totalOvertime">Tổng số giờ tăng ca: 0</h3>
+</div>
 
     <script>
-        const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; // Đường dẫn đến dữ liệu nhân viên
+        const employeeDataUrl = "https://Sang0000022255.github.io/chamcong/employees.json"; // Thay <username> bằng tên GitHub của bạn
 
         let employees = {};
-        let overtimeRecords = [];
 
         // Lấy dữ liệu từ GitHub
         async function fetchEmployeeData() {
@@ -127,54 +114,192 @@
 
             const resultDiv = document.getElementById("result");
             if (employee) {
-                resultDiv.innerHTML = `Chào ${employee.name}! Vui lòng thêm giờ tăng ca.`;
-                document.getElementById("overtimeEntry").style.display = "block";
-                document.getElementById("overtimeTableContainer").style.display = "block";
+                resultDiv.innerHTML = Chào ${employee.name}!;
             } else {
                 resultDiv.innerHTML = "Mã nhân viên không tồn tại.";
-                document.getElementById("overtimeEntry").style.display = "none";
-                document.getElementById("overtimeTableContainer").style.display = "none";
             }
         }
+// Biến lưu trữ thông tin giờ tăng ca
+let overtimeRecords = [];
 
-        // Thêm giờ tăng ca vào danh sách
-        function addOvertime() {
-            const date = document.getElementById("overtimeDate").value;
-            const hours = parseFloat(document.getElementById("overtimeHours").value);
+// Hiển thị form thêm giờ tăng ca sau khi tra cứu thành công
+function lookupEmployee() {
+    const employeeId = document.getElementById("employeeId").value.trim();
+    const employee = employees[employeeId];
 
-            if (!date || isNaN(hours) || hours < 0) {
-                alert("Vui lòng nhập ngày và số giờ hợp lệ.");
-                return;
+    const resultDiv = document.getElementById("result");
+    if (employee) {
+        resultDiv.innerHTML = Chào ${employee.name}! Vui lòng thêm giờ tăng ca.;
+        document.getElementById("overtimeEntry").style.display = "block";
+        document.getElementById("overtimeTableContainer").style.display = "block";
+    } else {
+        resultDiv.innerHTML = "Mã nhân viên không tồn tại.";
+        document.getElementById("overtimeEntry").style.display = "none";
+        document.getElementById("overtimeTableContainer").style.display = "none";
+    }
+}
+
+// Thêm giờ tăng ca vào danh sách
+function addOvertime() {
+    const date = document.getElementById("overtimeDate").value;
+    const hours = parseFloat(document.getElementById("overtimeHours").value);
+
+    if (!date || isNaN(hours) || hours < 0) {
+        alert("Vui lòng nhập ngày và số giờ hợp lệ.");
+        return;
+    }
+
+    // Thêm thông tin vào danh sách
+    overtimeRecords.push({ date, hours });
+
+    // Làm rỗng các ô nhập liệu
+    document.getElementById("overtimeDate").value = "";
+    document.getElementById("overtimeHours").value = "";
+
+    // Cập nhật bảng và tổng số giờ
+    updateOvertimeTable();
+}
+
+// Cập nhật bảng hiển thị giờ tăng ca
+function updateOvertimeTable() {
+    const tableBody = document.querySelector("#overtimeTable tbody");
+    tableBody.innerHTML = "";
+
+    let totalHours = 0;
+
+    overtimeRecords.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = 
+            <td>${record.date}</td>
+            <td>${record.hours}</td>
+        ;
+        tableBody.appendChild(row);
+        totalHours += record.hours;
+    });
+
+    // Hiển thị tổng số giờ
+    document.getElementById("totalOvertime").textContent = Tổng số giờ tăng ca: ${totalHours};
+}
+// Biến lưu trữ thông tin giờ làm
+let workRecords = [];
+const githubRepo = "chamcong"; // Tên repository của bạn
+const filePath = "work_records.json"; // Đường dẫn tệp JSON
+const githubUsername = "<Sang0000022255>"; // Tên GitHub của bạn
+const githubToken = "<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>"; // Thay bằng Personal Access Token
+
+// Lấy dữ liệu từ GitHub
+async function fetchWorkRecords() {
+    const url = https://api.github.com/repos/Sang0000022255/chamcong/contents/work_records.json;
+    try {
+        const response = await fetch(url, {
+            headers: {
+                Authorization: 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
             }
+        });
 
-            // Thêm thông tin vào danh sách
-            overtimeRecords.push({ date, hours });
+        if (!response.ok) throw new Error("Không thể tải dữ liệu từ GitHub.");
 
-            // Làm rỗng các ô nhập liệu
-            document.getElementById("overtimeDate").value = "";
-            document.getElementById("overtimeHours").value = "";
+        const fileData = await response.json();
+        const content = atob(fileData.content); // Decode Base64
+        workRecords = JSON.parse(content);
+        console.log("Dữ liệu đã tải:", workRecords);
+        updateWorkTable();
+    } catch (error) {
+        console.error("Lỗi khi tải dữ liệu:", error);
+        alert("Không thể tải dữ liệu từ GitHub.");
+    }
+}
 
-            // Cập nhật bảng và tổng số giờ
-            updateOvertimeTable();
-        }
+// Ghi dữ liệu lên GitHub
+async function saveWorkRecords() {
+    const url = https://api.github.com/repos/Sang0000022255/chamcong/contents/work_records.json;
+    try {
+        // Encode dữ liệu thành Base64
+        const content = btoa(JSON.stringify(workRecords, null, 2));
 
-        // Cập nhật bảng hiển thị giờ tăng ca
-        function updateOvertimeTable() {
-            const tableBody = document.querySelector("#overtimeTable tbody");
-            tableBody.innerHTML = "";
+        // Lấy SHA hiện tại của tệp
+        const response = await fetch(url, {
+            headers: {
+                Authorization: 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
+            }
+        });
+        const fileData = await response.json();
 
-            let totalHours = 0;
+        // Ghi đè tệp
+        await fetch(url, {
+            method: "PUT",
+            headers: {
+                Authorization: token ${githubToken},
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: "Cập nhật dữ liệu giờ làm",
+                content: content,
+                sha: fileData.sha // SHA của tệp hiện tại
+            })
+        });
 
-            overtimeRecords.forEach(record => {
-                const row = document.createElement("tr");
-                row.innerHTML = `<td>${record.date}</td><td>${record.hours}</td>`;
-                tableBody.appendChild(row);
-                totalHours += record.hours;
-            });
+        alert("Dữ liệu đã được lưu thành công trên GitHub!");
+    } catch (error) {
+        console.error("Lỗi khi lưu dữ liệu:", error);
+        alert("Không thể lưu dữ liệu lên GitHub.");
+    }
+}
 
-            // Hiển thị tổng số giờ
-            document.getElementById("totalOvertime").textContent = `Tổng số giờ tăng ca: ${totalHours}`;
-        }
+// Thêm giờ làm chính và tăng ca
+function addWorkHours() {
+    const date = document.getElementById("workDate").value;
+    const workHours = parseFloat(document.getElementById("workHours").value);
+    const overtimeHours = parseFloat(document.getElementById("overtimeHours").value);
+
+    if (!date || isNaN(workHours) || workHours < 0 || isNaN(overtimeHours) || overtimeHours < 0) {
+        alert("Vui lòng nhập dữ liệu hợp lệ.");
+        return;
+    }
+
+    // Thêm dữ liệu vào danh sách
+    workRecords.push({ date, workHours, overtimeHours });
+
+    // Cập nhật bảng và lưu dữ liệu
+    updateWorkTable();
+    saveWorkRecords();
+
+    // Xóa dữ liệu trong các ô nhập liệu
+    document.getElementById("workDate").value = "";
+    document.getElementById("workHours").value = "";
+    document.getElementById("overtimeHours").value = "";
+}
+
+// Cập nhật bảng hiển thị
+function updateWorkTable() {
+    const tableBody = document.querySelector("#workTable tbody");
+    tableBody.innerHTML = "";
+
+    let totalWork = 0;
+    let totalOvertime = 0;
+
+    workRecords.forEach(record => {
+        const total = record.workHours + record.overtimeHours;
+        const row = document.createElement("tr");
+        row.innerHTML = 
+            <td>${record.date}</td>
+            <td>${record.workHours}</td>
+            <td>${record.overtimeHours}</td>
+            <td>${total}</td>
+        ;
+        tableBody.appendChild(row);
+
+        totalWork += record.workHours;
+        totalOvertime += record.overtimeHours;
+    });
+
+    document.getElementById("totalWork").textContent = Tổng giờ làm chính: ${totalWork};
+    document.getElementById("totalOvertime").textContent = Tổng giờ tăng ca: ${totalOvertime};
+    document.getElementById("grandTotal").textContent = Tổng tất cả giờ: ${totalWork + totalOvertime};
+}
+
+// Tải dữ liệu khi trang được mở
+fetchWorkRecords();
 
         // Tải dữ liệu khi trang được mở
         fetchEmployeeData();
