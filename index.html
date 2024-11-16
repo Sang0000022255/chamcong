@@ -164,38 +164,6 @@
         alert('Vui lòng nhập đầy đủ thông tin!');
       }
     }
-const { google } = require('googleapis');
-const credentials = require('./credentials.json'); // Tệp JSON từ Google Cloud
-
-async function writeDataToSheet() {
-  const auth = new google.auth.GoogleAuth({
-    credentials,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  });
-
-  const sheets = google.sheets({ version: 'v4', auth });
-
-  const spreadsheetId = 'AIzaSyAMPwnJ0Op23L9byv0KJzw8ZCBGS66M-kY'; // ID của file Google Sheets trên Drive
-  const range = 'Sheet1!A1:C1'; // Vị trí muốn ghi dữ liệu
-
-  const values = [
-    ['Nguyễn Văn A', '2024-11-16', '5'], // Ví dụ dữ liệu
-  ];
-
-  const resource = { values };
-
-  try {
-    const result = await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range,
-      valueInputOption: 'USER_ENTERED',
-      resource,
-    });
-    console.log(`${result.data.updates.updatedCells} ô đã được cập nhật.`);
-  } catch (error) {
-    console.error('Lỗi khi ghi dữ liệu:', error);
-  }
-}
 
 writeDataToSheet();
 
