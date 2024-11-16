@@ -80,27 +80,33 @@
       <input type="text" id="search-input" placeholder="Tên hoặc mã nhân viên">
       <button onclick="searchEmployee()">Tìm kiếm</button>
     </div>
-    
+
     <div id="result"></div>
   </div>
 
   <script>
-    const employees = [
-      { name: "Nguyễn Văn A", code: "NV001", position: "Nhân viên" },
-      { name: "Trần Thị B", code: "NV002", position: "Quản lý" },
-      { name: "Lê Minh C", code: "NV003", position: "Giám đốc" },
-      // Thêm dữ liệu nhân viên vào đây
-    ];
+    let employees = []; // Biến toàn cục lưu trữ danh sách nhân viên
 
+    // Lấy dữ liệu từ employees.json
+    async function fetchEmployees() {
+      try {
+        const response = await fetch('employees.json');
+        employees = await response.json();
+      } catch (error) {
+        console.error('Không thể tải dữ liệu nhân viên:', error);
+      }
+    }
+
+    // Tìm kiếm nhân viên
     function searchEmployee() {
       const query = document.getElementById('search-input').value.trim().toLowerCase();
       const result = employees.filter(employee =>
         employee.name.toLowerCase().includes(query) || employee.code.toLowerCase().includes(query)
       );
-      
       displayResult(result);
     }
 
+    // Hiển thị kết quả tìm kiếm
     function displayResult(result) {
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = '';
@@ -114,6 +120,9 @@
         resultDiv.innerHTML = '<p>Không tìm thấy nhân viên.</p>';
       }
     }
+
+    // Tải dữ liệu nhân viên khi trang được mở
+    fetchEmployees();
   </script>
 
 </body>
