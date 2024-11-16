@@ -16,7 +16,7 @@ document.getElementById("save-data").addEventListener("click", async () => {
     };
 
     try {
-        const response = await fetch("https://docs.google.com/spreadsheets/d/1myOZNfu2YG_SpheBotUbATn5Z6ZxfQ4OHmfo8_GM9Vo/edit?gid=0#gid=0", {
+        const response = await fetch("https://docs.google.com/spreadsheets/d/1myOZNfu2YG_SpheBotUbATn5Z6ZxfQ4OHmfo8_GM9Vo/edit?usp=sharing", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
