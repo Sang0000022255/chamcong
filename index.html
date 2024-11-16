@@ -7,34 +7,82 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #f0f8ff, #e6f7ff);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+    h1 {
+      color: #0066cc;
+      margin-bottom: 20px;
     }
     .form-container {
       margin-bottom: 20px;
     }
+    label {
+      font-size: 16px;
+      color: #555;
+    }
     input[type="text"] {
       padding: 10px;
-      width: 200px;
+      width: calc(100% - 24px);
+      margin: 10px 0;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
     button {
       padding: 10px 20px;
       font-size: 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #004c99;
+    }
+    #result {
+      margin-top: 20px;
+      text-align: left;
+    }
+    #result p {
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
     }
   </style>
 </head>
 <body>
 
-  <h1>Tìm kiếm thông tin nhân viên</h1>
-  
-  <div class="form-container">
-    <label for="search-input">Nhập tên hoặc mã nhân viên:</label>
-    <input type="text" id="search-input" placeholder="Tên hoặc mã nhân viên">
-    <button onclick="searchEmployee()">Tìm kiếm</button>
+  <div class="container">
+    <h1>Tìm kiếm thông tin nhân viên</h1>
+    
+    <div class="form-container">
+      <label for="search-input">Nhập tên hoặc mã nhân viên:</label>
+      <input type="text" id="search-input" placeholder="Tên hoặc mã nhân viên">
+      <button onclick="searchEmployee()">Tìm kiếm</button>
+    </div>
+    
+    <div id="result"></div>
   </div>
-  
-  <div id="result"></div>
 
   <script>
     const employees = [
