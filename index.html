@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý giờ tăng ca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quản lý giờ tăng ca</h1>
+    <form id="overtime-form">
+        <label for="employee-id">Mã nhân viên:</label>
+        <input type="text" id="employee-id" placeholder="Nhập mã nhân viên" required>
+
+        <label for="employee-name">Tên nhân viên:</label>
+        <input type="text" id="employee-name" placeholder="Nhập tên nhân viên">
+
+        <label for="overtime-hours">Số giờ tăng ca:</label>
+        <input type="number" id="overtime-hours" placeholder="Nhập số giờ" min="0" required>
+
+        <button type="button" id="save-data">Lưu dữ liệu</button>
+    </form>
+    <p id="status" style="text-align: center; color: green;"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
