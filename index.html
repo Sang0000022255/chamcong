@@ -1,27 +1,32 @@
-const apiUrl = "https://script.google.com/macros/library/d/1IyvwxGakxupetRtYfxdeeBuaDlIt0oeO0pVM4Srru6CpjpJCMGLwP3Jl/5"; // Thay YOUR_WEB_APP_URL bằng URL Web App đã triển khai
+const apiUrl = "https://script.google.com/macros/s/your-web-app-url/exec"; // Thay thế YOUR_WEB_APP_URL bằng URL Web App của bạn
 
+let selectedEmployee = null; // Giả sử bạn đã chọn nhân viên, có thể chỉnh lại phần này nếu cần
+let overtimeHistory = JSON.parse(localStorage.getItem('overtimeHistory')) || []; // Lưu lịch sử vào localStorage nếu cần
+
+// Lưu tăng ca
 function addOvertime() {
-  const employeeId = selectedEmployee?.id || "";
-  const date = document.getElementById("overtime-date").value;
-  const hours = document.getElementById("overtime-hours").value;
+  const employeeId = selectedEmployee?.id || ""; // Mã nhân viên
+  const date = document.getElementById("overtime-date").value; // Ngày tăng ca
+  const hours = document.getElementById("overtime-hours").value; // Số giờ tăng ca
 
+  // Kiểm tra xem dữ liệu đã đầy đủ chưa
   if (!employeeId || !date || !hours) {
     alert("Vui lòng nhập đầy đủ thông tin.");
     return;
   }
 
-  const data = { employeeId, date, hours };
+  const data = { employeeId, date, hours }; // Tạo dữ liệu gửi lên Google Sheets
 
   fetch(apiUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify(data), // Gửi dữ liệu theo định dạng JSON
   })
-    .then((response) => response.text())
+    .then((response) => response.text()) // Nhận phản hồi từ API
     .then((result) => {
       if (result === "Success") {
         alert("Lưu thành công!");
-        fetchOvertimeHistory();
+        fetchOvertimeHistory(); // Lấy lại dữ liệu lịch sử tăng ca
       } else {
         alert("Có lỗi xảy ra.");
       }
@@ -29,9 +34,10 @@ function addOvertime() {
     .catch((error) => console.error("Error:", error));
 }
 
+// Lấy lịch sử tăng ca
 function fetchOvertimeHistory() {
-  fetch(apiUrl)
-    .then((response) => response.json())
+  fetch(apiUrl) // Lấy dữ liệu từ Google Sheets
+    .then((response) => response.json()) // Chuyển đổi dữ liệu sang JSON
     .then((rows) => {
       const historyDiv = document.getElementById("overtime-history");
 
@@ -41,29 +47,34 @@ function fetchOvertimeHistory() {
         return;
       }
 
-      // Hiển thị dữ liệu dưới dạng bảng
-      historyDiv.innerHTML = `
-        <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
-          <thead>
-            <tr>
-              <th>Mã NV</th>
-              <th>Ngày</th>
-              <th>Giờ tăng ca</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows
-              .map(
-                (row) => `
-                  <tr>
-                    <td>${row[0]}</td>
-                    <td>${row[1]}</td>
-                    <td>${row[2]}</td>
-                  </tr>`
-              )
-              .join("")}
-          </tbody>
-        </table>`;
+      // Kiểm tra cấu trúc dữ liệu để đảm bảo rằng rows là mảng 2D
+      if (Array.isArray(rows)) {
+        historyDiv.innerHTML = `
+          <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th>Mã NV</th>
+                <th>Ngày</th>
+                <th>Giờ tăng ca</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows
+                .map(
+                  (row) => `
+                    <tr>
+                      <td>${row[0]}</td>
+                      <td>${row[1]}</td>
+                      <td>${row[2]}</td>
+                    </tr>`
+                )
+                .join("")}
+            </tbody>
+          </table>`;
+      } else {
+        console.error("Dữ liệu không đúng định dạng!");
+        historyDiv.innerHTML = "<p>Lỗi cấu trúc dữ liệu từ server.</p>";
+      }
     })
     .catch((error) => console.error("Error:", error));
 }
