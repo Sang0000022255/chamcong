@@ -97,11 +97,77 @@
     <div id="overtime-history"></div>
   </div>
 
-  <script src="employees.js"></script>
   <script>
+    let employees = [
+      { name: "Nguyễn Văn A", code: "NV001", position: "Nhân viên" },
+      { name: "Trần Thị B", code: "NV002", position: "Quản lý" },
+      { name: "Lê Minh C", code: "NV003", position: "Giám đốc" },
+    ];
+
     let selectedEmployee = null;
     let overtimeHistory = JSON.parse(localStorage.getItem('overtimeHistory')) || [];
 
     // Hiển thị lịch sử tăng ca
     function displayOvertimeHistory() {
-      const historyDiv = document.getElementById('overtime-history'); 
+      const historyDiv = document.getElementById('overtime-history');
+      historyDiv.innerHTML = '';
+      
+      if (overtimeHistory.length > 0) {
+        overtimeHistory.forEach(entry => {
+          const overtimeEntry = <p>Mã NV: ${entry.code}, Ngày: ${entry.date}, Số giờ: ${entry.hours}</p>;
+          historyDiv.innerHTML += overtimeEntry;
+        });
+      } else {
+        historyDiv.innerHTML = '<p>Chưa có dữ liệu tăng ca.</p>';
+      }
+    }
+
+    // Tìm kiếm nhân viên
+    function searchEmployee() {
+      const query = document.getElementById('search-input').value.trim().toLowerCase();
+      const result = employees.filter(employee =>
+        employee.name.toLowerCase().includes(query) || employee.code.toLowerCase().includes(query)
+      );
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+      
+      if (result.length > 0) {
+        selectedEmployee = result[0];
+        resultDiv.innerHTML = <p><strong>${selectedEmployee.name}</strong> (${selectedEmployee.code}) - ${selectedEmployee.position}</p>;
+        document.getElementById('overtime-section').style.display = 'block';
+      } else {
+        resultDiv.innerHTML = '<p>Không tìm thấy nhân viên.</p>';
+        document.getElementById('overtime-section').style.display = 'none';
+        selectedEmployee = null;
+      }
+    }
+
+    // Lưu tăng ca
+    function addOvertime() {
+      if (!selectedEmployee) {
+        alert('Vui lòng tìm kiếm và chọn nhân viên trước!');
+        return;
+      }
+
+      const date = document.getElementById('overtime-date').value;
+      const hours = document.getElementById('overtime-hours').value;
+
+      if (date && hours) {
+        overtimeHistory.push({ code: selectedEmployee.code, date, hours });
+        localStorage.setItem('overtimeHistory', JSON.stringify(overtimeHistory));
+        alert('Đã lưu thông tin tăng ca!');
+        document.getElementById('overtime-date').value = '';
+        document.getElementById('overtime-hours').value = '';
+        displayOvertimeHistory();
+      } else {
+        alert('Vui lòng nhập đầy đủ thông tin!');
+      }
+    }
+
+    // Hiển thị lịch sử tăng ca khi trang được tải
+    displayOvertimeHistory();
+  </script>
+
+</body>
+</html>
