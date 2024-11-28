@@ -34,19 +34,35 @@ function fetchOvertimeHistory() {
     .then((response) => response.json())
     .then((rows) => {
       const historyDiv = document.getElementById("overtime-history");
+
+      // Kiểm tra nếu không có dữ liệu
+      if (!rows || rows.length === 0) {
+        historyDiv.innerHTML = "<p>Không có dữ liệu lịch sử tăng ca.</p>";
+        return;
+      }
+
+      // Hiển thị dữ liệu dưới dạng bảng
       historyDiv.innerHTML = `
         <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
-          <tr>
-            <th>Mã NV</th>
-            <th>Ngày</th>
-            <th>Giờ tăng ca</th>
-          </tr>
-          ${rows
-            .map(
-              (row) =>
-                `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`
-            )
-            .join("")}
+          <thead>
+            <tr>
+              <th>Mã NV</th>
+              <th>Ngày</th>
+              <th>Giờ tăng ca</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows
+              .map(
+                (row) => `
+                  <tr>
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                  </tr>`
+              )
+              .join("")}
+          </tbody>
         </table>`;
     })
     .catch((error) => console.error("Error:", error));
