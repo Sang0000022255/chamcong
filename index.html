@@ -1,83 +1,107 @@
-const apiUrl = "https://script.google.com/macros/s/your-web-app-url/exec"; // Thay thế YOUR_WEB_APP_URL bằng URL Web App của bạn
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tìm kiếm nhân viên & Lưu tăng ca</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #f0f8ff, #e6f7ff);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+    h1, h2 {
+      color: #0066cc;
+      margin-bottom: 20px;
+    }
+    .form-container {
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 16px;
+      color: #555;
+    }
+    input[type="text"], input[type="date"], input[type="number"] {
+      padding: 10px;
+      width: calc(100% - 24px);
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #004c99;
+    }
+    #result, #overtime-section, #overtime-history {
+      margin-top: 20px;
+      text-align: left;
+    }
+    #result p, #overtime-history p {
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
 
-let selectedEmployee = null; // Giả sử bạn đã chọn nhân viên, có thể chỉnh lại phần này nếu cần
-let overtimeHistory = JSON.parse(localStorage.getItem('overtimeHistory')) || []; // Lưu lịch sử vào localStorage nếu cần
+  <div class="container">
+    <h1>Tìm kiếm thông tin nhân viên</h1>
+    <div class="form-container">
+      <label for="search-input">Nhập tên hoặc mã nhân viên:</label>
+      <input type="text" id="search-input" placeholder="Tên hoặc mã nhân viên">
+      <button onclick="searchEmployee()">Tìm kiếm</button>
+    </div>
 
-// Lưu tăng ca
-function addOvertime() {
-  const employeeId = selectedEmployee?.id || ""; // Mã nhân viên
-  const date = document.getElementById("overtime-date").value; // Ngày tăng ca
-  const hours = document.getElementById("overtime-hours").value; // Số giờ tăng ca
+    <div id="result"></div>
 
-  // Kiểm tra xem dữ liệu đã đầy đủ chưa
-  if (!employeeId || !date || !hours) {
-    alert("Vui lòng nhập đầy đủ thông tin.");
-    return;
-  }
+    <div id="overtime-section" style="display: none;">
+      <h2>Nhập giờ tăng ca</h2>
+      <div class="form-container">
+        <label for="overtime-date">Ngày:</label>
+        <input type="date" id="overtime-date">
+        <label for="overtime-hours">Số giờ tăng ca:</label>
+        <input type="number" id="overtime-hours" placeholder="Nhập số giờ tăng ca" min="0">
+        <button onclick="addOvertime()">Lưu tăng ca</button>
+      </div>
+    </div>
 
-  const data = { employeeId, date, hours }; // Tạo dữ liệu gửi lên Google Sheets
+    <h2>Lịch sử tăng ca</h2>
+    <div id="overtime-history"></div>
+  </div>
 
-  fetch(apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data), // Gửi dữ liệu theo định dạng JSON
-  })
-    .then((response) => response.text()) // Nhận phản hồi từ API
-    .then((result) => {
-      if (result === "Success") {
-        alert("Lưu thành công!");
-        fetchOvertimeHistory(); // Lấy lại dữ liệu lịch sử tăng ca
-      } else {
-        alert("Có lỗi xảy ra.");
-      }
-    })
-    .catch((error) => console.error("Error:", error));
-}
+  <script src="employees.js"></script>
+  <script>
+    let selectedEmployee = null;
+    let overtimeHistory = JSON.parse(localStorage.getItem('overtimeHistory')) || [];
 
-// Lấy lịch sử tăng ca
-function fetchOvertimeHistory() {
-  fetch(apiUrl) // Lấy dữ liệu từ Google Sheets
-    .then((response) => response.json()) // Chuyển đổi dữ liệu sang JSON
-    .then((rows) => {
-      const historyDiv = document.getElementById("overtime-history");
-
-      // Kiểm tra nếu không có dữ liệu
-      if (!rows || rows.length === 0) {
-        historyDiv.innerHTML = "<p>Không có dữ liệu lịch sử tăng ca.</p>";
-        return;
-      }
-
-      // Kiểm tra cấu trúc dữ liệu để đảm bảo rằng rows là mảng 2D
-      if (Array.isArray(rows)) {
-        historyDiv.innerHTML = `
-          <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
-            <thead>
-              <tr>
-                <th>Mã NV</th>
-                <th>Ngày</th>
-                <th>Giờ tăng ca</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows
-                .map(
-                  (row) => `
-                    <tr>
-                      <td>${row[0]}</td>
-                      <td>${row[1]}</td>
-                      <td>${row[2]}</td>
-                    </tr>`
-                )
-                .join("")}
-            </tbody>
-          </table>`;
-      } else {
-        console.error("Dữ liệu không đúng định dạng!");
-        historyDiv.innerHTML = "<p>Lỗi cấu trúc dữ liệu từ server.</p>";
-      }
-    })
-    .catch((error) => console.error("Error:", error));
-}
-
-// Hiển thị lịch sử tăng ca khi tải trang
-document.addEventListener("DOMContentLoaded", fetchOvertimeHistory);
+    // Hiển thị lịch sử tăng ca
+    function displayOvertimeHistory() {
+      const historyDiv = document.getElementById('overtime-history'); 
