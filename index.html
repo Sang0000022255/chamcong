@@ -1,41 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý Tăng Ca</title>
-  
-  <!-- Firebase SDK v9+ -->
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
-</head>
-<body>
-  <h1>Quản lý Tăng Ca</h1>
-  <input type="text" id="employeeId" placeholder="Nhập mã nhân viên">
-  <button onclick="searchEmployee()">Tìm kiếm</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Tăng Ca</title>
 
-  <div id="inputSection" style="display: none;">
-    <h2>Nhập thông tin</h2>
-    <label>Số ngày tăng ca:</label>
-    <input type="number" id="days" min="0"><br>
-    <label>Số giờ tăng ca:</label>
-    <input type="number" id="hours" min="0"><br>
-    <button onclick="saveOvertime()">Lưu thông tin</button>
-  </div>
+    <!-- Firebase SDK v9+ -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js" type="module"></script>
+  </head>
+  <body>
+    <h1>Quản lý Tăng Ca</h1>
+    <input type="text" id="employeeId" placeholder="Nhập mã nhân viên" />
+    <button onclick="searchEmployee()">Tìm kiếm</button>
 
-  <table id="overtimeTable">
-    <thead>
-      <tr>
-        <th>Mã Nhân Viên</th>
-        <th>Số Ngày Tăng Ca</th>
-        <th>Số Giờ Tăng Ca</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-    </tbody>
-  </table>
+    <div id="inputSection" style="display: none;">
+      <h2>Nhập thông tin</h2>
+      <label>Số ngày tăng ca:</label>
+      <input type="number" id="days" min="0" /><br />
+      <label>Số giờ tăng ca:</label>
+      <input type="number" id="hours" min="0" /><br />
+      <button onclick="saveOvertime()">Lưu thông tin</button>
+    </div>
 
-  <!-- Tệp JavaScript của bạn -->
-  <script src="app.js"></script>
-</body>
+    <table id="overtimeTable">
+      <thead>
+        <tr>
+          <th>Mã Nhân Viên</th>
+          <th>Số Ngày Tăng Ca</th>
+          <th>Số Giờ Tăng Ca</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+
+    <!-- Tệp JavaScript của bạn -->
+    <script src="app.js" type="module"></script>
+  </body>
 </html>
