@@ -1,8 +1,7 @@
-// Import Firebase SDK từ Firebase v9+ (Modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
-// Firebase Config - Lấy từ Firebase Console
+// Firebase config (lấy từ Firebase Console)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCaTrs5w-JiEAxhBnpjLM0lofRFy1MhoVM",
@@ -19,51 +18,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-// Tìm kiếm nhân viên
-function searchEmployee() {
+// Hàm lưu thông tin nhân viên và tăng ca vào Firebase
+function saveEmployeeData() {
   const employeeId = document.getElementById("employeeId").value;
-  if (employeeId.trim() === "") {
-    alert("Vui lòng nhập mã nhân viên!");
-    return;
-  }
-  document.getElementById("inputSection").style.display = "block";
-}
-
-// Lưu thông tin tăng ca
-function saveOvertime() {
-  const employeeId = document.getElementById("employeeId").value;
+  const name = document.getElementById("name").value;
   const days = document.getElementById("days").value;
   const hours = document.getElementById("hours").value;
 
-  if (days === "" || hours === "") {
-    alert("Vui lòng nhập đầy đủ thông tin!");
+  // Kiểm tra các trường dữ liệu đã được điền đầy đủ chưa
+  if (!employeeId || !name || !days || !hours) {
+    alert("Vui lòng điền đầy đủ thông tin!");
     return;
   }
 
+  // Dữ liệu nhân viên
+  const employeeData = {
+    employeeId: employeeId,
+    name: name
+  };
+
+  // Lưu thông tin nhân viên vào node "employees"
+  const employeeRef = ref(database, 'employees/' + employeeId);
+  set(employeeRef, employeeData)
+    .then(() => {
+      console.log("Thông tin nhân viên đã được lưu!");
+    })
+    .catch((error) => {
+      console.error("Lỗi khi lưu thông tin nhân viên:", error);
+    });
+
+  // Dữ liệu tăng ca
   const overtimeData = {
-    employeeId,
     days: parseInt(days),
     hours: parseInt(hours)
   };
 
-  // Lưu dữ liệu vào Firebase
+  // Lưu thông tin tăng ca vào node "overtime"
   const overtimeRef = ref(database, 'overtime/' + employeeId);
   set(overtimeRef, overtimeData)
     .then(() => {
-      alert("Lưu thành công!");
-      addRowToTable(overtimeData);
+      console.log("Thông tin tăng ca đã được lưu!");
     })
     .catch((error) => {
-      console.error("Lỗi khi lưu dữ liệu:", error);
+      console.error("Lỗi khi lưu thông tin tăng ca:", error);
     });
-}
-
-// Thêm hàng vào bảng
-function addRowToTable(data) {
-  const tableBody = document.getElementById("tableBody");
-  const row = tableBody.insertRow();
-
-  row.insertCell(0).innerText = data.employeeId;
-  row.insertCell(1).innerText = data.days;
-  row.insertCell(2).innerText = data.hours;
 }
