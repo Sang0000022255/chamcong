@@ -12,30 +12,21 @@
   <body>
     <h1>Quản lý Tăng Ca</h1>
 
-    <!-- Thêm trường nhập liệu cho mã nhân viên và tên nhân viên -->
-    <input type="text" id="searchTerm" placeholder="Nhập mã nhân viên hoặc tên" />
-    <button onclick="searchEmployee()">Tìm kiếm</button>
+    <!-- Nhập thông tin mã nhân viên và tên nhân viên -->
+    <label for="employeeId">Mã Nhân Viên:</label>
+    <input type="text" id="employeeId" placeholder="Nhập mã nhân viên" /><br />
 
-    <div id="inputSection" style="display: none;">
-      <h2>Nhập thông tin</h2>
-      <label>Số ngày tăng ca:</label>
-      <input type="number" id="days" min="0" /><br />
-      <label>Số giờ tăng ca:</label>
-      <input type="number" id="hours" min="0" /><br />
-      <button onclick="saveOvertime()">Lưu thông tin</button>
-    </div>
+    <label for="name">Tên Nhân Viên:</label>
+    <input type="text" id="name" placeholder="Nhập tên nhân viên" /><br />
 
-    <table id="overtimeTable">
-      <thead>
-        <tr>
-          <th>Mã Nhân Viên</th>
-          <th>Tên Nhân Viên</th>
-          <th>Số Ngày Tăng Ca</th>
-          <th>Số Giờ Tăng Ca</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+    <!-- Nhập thông tin tăng ca -->
+    <label for="days">Số Ngày Tăng Ca:</label>
+    <input type="number" id="days" min="0" /><br />
+
+    <label for="hours">Số Giờ Tăng Ca:</label>
+    <input type="number" id="hours" min="0" /><br />
+
+    <button onclick="saveEmployeeData()">Lưu thông tin</button>
 
     <!-- Tệp JavaScript của bạn -->
     <script src="app.js" type="module"></script>
