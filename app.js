@@ -1,8 +1,8 @@
-// Import các hàm cần thiết từ Firebase SDK v9+
+// Import Firebase SDK v9+ (Modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
-// Firebase Configuration (thay bằng thông tin của bạn)
+// Firebase Configuration (Thay bằng thông tin của bạn)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCaTrs5w-JiEAxhBnpjLM0lofRFy1MhoVM",
