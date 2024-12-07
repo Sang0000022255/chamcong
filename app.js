@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 // Hàm lưu thông tin nhân viên và tăng ca vào Firebase
-function saveEmployeeData() {
+export function saveEmployeeData() {
   const employeeId = document.getElementById("employeeId").value;
   const name = document.getElementById("name").value;
   const days = document.getElementById("days").value;
