@@ -1,4 +1,3 @@
-// Firebase config (lấy từ Firebase Console)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCaTrs5w-JiEAxhBnpjLM0lofRFy1MhoVM",
@@ -10,10 +9,9 @@ const firebaseConfig = {
   appId: "1:485241829938:web:d18a7fd68a9d6238939a2b",
   measurementId: "G-YXQKLKH0Z4"
 };
-
 // Khởi tạo Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 // Hàm lưu thông tin nhân viên và tăng ca vào Firebase
 function saveEmployeeData() {
