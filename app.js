@@ -1,8 +1,8 @@
-// Import Firebase SDK v9+ (Modular)
+// Import Firebase SDK từ Firebase v9+ (Modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
-// Firebase Configuration (Thay bằng thông tin của bạn)
+// Firebase Config - Lấy từ Firebase Console
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCaTrs5w-JiEAxhBnpjLM0lofRFy1MhoVM",
@@ -47,7 +47,7 @@ function saveOvertime() {
   };
 
   // Lưu dữ liệu vào Firebase
-  const overtimeRef = ref(database, 'overtime/' + employeeId); // Đối tượng lưu trữ theo ID nhân viên
+  const overtimeRef = ref(database, 'overtime/' + employeeId);
   set(overtimeRef, overtimeData)
     .then(() => {
       alert("Lưu thành công!");
