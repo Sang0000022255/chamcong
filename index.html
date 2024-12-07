@@ -11,7 +11,9 @@
   </head>
   <body>
     <h1>Quản lý Tăng Ca</h1>
-    <input type="text" id="employeeId" placeholder="Nhập mã nhân viên" />
+
+    <!-- Thêm trường nhập liệu cho mã nhân viên và tên nhân viên -->
+    <input type="text" id="searchTerm" placeholder="Nhập mã nhân viên hoặc tên" />
     <button onclick="searchEmployee()">Tìm kiếm</button>
 
     <div id="inputSection" style="display: none;">
@@ -27,6 +29,7 @@
       <thead>
         <tr>
           <th>Mã Nhân Viên</th>
+          <th>Tên Nhân Viên</th>
           <th>Số Ngày Tăng Ca</th>
           <th>Số Giờ Tăng Ca</th>
         </tr>
