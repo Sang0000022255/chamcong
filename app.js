@@ -1,4 +1,8 @@
-// Firebase Configuration
+// Import các hàm cần thiết từ Firebase SDK v9+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+// Firebase Configuration (thay bằng thông tin của bạn)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCaTrs5w-JiEAxhBnpjLM0lofRFy1MhoVM",
@@ -11,9 +15,9 @@ const firebaseConfig = {
   measurementId: "G-YXQKLKH0Z4"
 };
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
+// Khởi tạo Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 // Tìm kiếm nhân viên
 function searchEmployee() {
@@ -43,7 +47,8 @@ function saveOvertime() {
   };
 
   // Lưu dữ liệu vào Firebase
-  firebase.database().ref("overtime/" + employeeId).set(overtimeData)
+  const overtimeRef = ref(database, 'overtime/' + employeeId); // Đối tượng lưu trữ theo ID nhân viên
+  set(overtimeRef, overtimeData)
     .then(() => {
       alert("Lưu thành công!");
       addRowToTable(overtimeData);
