@@ -1,6 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
-
+// Firebase config (lấy từ Firebase Console)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCaTrs5w-JiEAxhBnpjLM0lofRFy1MhoVM",
@@ -14,11 +12,11 @@ const firebaseConfig = {
 };
 
 // Khởi tạo Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database(app);
 
 // Hàm lưu thông tin nhân viên và tăng ca vào Firebase
-export function saveEmployeeData() {
+function saveEmployeeData() {
   const employeeId = document.getElementById("employeeId").value;
   const name = document.getElementById("name").value;
   const days = document.getElementById("days").value;
@@ -37,8 +35,7 @@ export function saveEmployeeData() {
   };
 
   // Lưu thông tin nhân viên vào node "employees"
-  const employeeRef = ref(database, 'employees/' + employeeId);
-  set(employeeRef, employeeData)
+  firebase.database().ref('employees/' + employeeId).set(employeeData)
     .then(() => {
       console.log("Thông tin nhân viên đã được lưu!");
     })
@@ -53,8 +50,7 @@ export function saveEmployeeData() {
   };
 
   // Lưu thông tin tăng ca vào node "overtime"
-  const overtimeRef = ref(database, 'overtime/' + employeeId);
-  set(overtimeRef, overtimeData)
+  firebase.database().ref('overtime/' + employeeId).set(overtimeData)
     .then(() => {
       console.log("Thông tin tăng ca đã được lưu!");
     })
