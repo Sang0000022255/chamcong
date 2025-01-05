@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhập Dữ liệu Tăng ca</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.6/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -66,6 +67,25 @@
             color: red;
             text-align: center;
         }
+        #current-time {
+            font-size: 18px;
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .download-btn {
+            background-color: #008CBA;
+            padding: 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            font-size: 16px;
+        }
+        .download-btn:hover {
+            background-color: #007bb5;
+        }
     </style>
 </head>
 <body>
@@ -102,9 +122,42 @@
             <button type="submit">Nhập Dữ liệu</button>
             <div class="form-message" id="formMessage"></div>
         </form>
+
+        <div id="current-time"></div>
+
+        <button class="download-btn" onclick="downloadExcel()">Tải xuống file Excel</button>
     </div>
 
     <script>
+        // Hàm cập nhật thời gian hiện tại
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            document.getElementById('current-time').textContent = `Ngày: ${day}/${month}/${year} - Giờ: ${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateTime, 1000); // Cập nhật mỗi giây
+
+        // Hàm tải xuống file Excel
+        function downloadExcel() {
+            const formData = new FormData(document.getElementById('overtimeForm'));
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet([data]);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Dữ liệu Tăng ca");
+            XLSX.writeFile(workbook, "du_lieu_tang_ca.xlsx");
+        }
+
+        // Xử lý sự kiện khi form được gửi
         document.getElementById('overtimeForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7'; // Thay thế bằng URL webhook của bạn
