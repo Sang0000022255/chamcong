@@ -1,34 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản lý Tăng Ca</title>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Gửi Dữ Liệu</title>
+</head>
+<body>
+    <h1>Gửi Dữ Liệu Đến Google Sheets Qua Make</h1>
+    <form id="dataForm">
+        <label for="name">Họ và tên:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="message">Tin nhắn:</label>
+        <textarea id="message" name="message" required></textarea><br><br>
+        <button type="submit">Gửi</button>
+    </form>
 
-    <!-- Firebase SDK v8 (không sử dụng module) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  </head>
-  <body>
-    <h1>Quản lý Tăng Ca</h1>
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Ngăn không cho trang reload
+            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7'; // Thay thế bằng URL webhook của bạn
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
 
-    <!-- Nhập thông tin mã nhân viên và tên nhân viên -->
-    <label for="employeeId">Mã Nhân Viên:</label>
-    <input type="text" id="employeeId" placeholder="Nhập mã nhân viên" /><br />
-
-    <label for="name">Tên Nhân Viên:</label>
-    <input type="text" id="name" placeholder="Nhập tên nhân viên" /><br />
-
-    <!-- Nhập thông tin tăng ca -->
-    <label for="days">Số Ngày Tăng Ca:</label>
-    <input type="number" id="days" min="0" /><br />
-
-    <label for="hours">Số Giờ Tăng Ca:</label>
-    <input type="number" id="hours" min="0" /><br />
-
-    <button onclick="saveEmployeeData()">Lưu thông tin</button>
-
-    <!-- Liên kết tệp JavaScript -->
-    <script src="app.js"></script>
-  </body>
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Dữ liệu đã được gửi thành công!');
+                } else {
+                    alert('Có lỗi xảy ra khi gửi dữ liệu.');
+                }
+            })
+            .catch(error => {
+                alert('Có lỗi xảy ra: ' + error.message);
+            });
+        });
+    </script>
+</body>
 </html>
