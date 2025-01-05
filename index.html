@@ -100,10 +100,43 @@
         .access-link:hover {
             background-color: #f57c00;
         }
+
+        /* Style for the login screen */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .login-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-box input {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <!-- Màn hình Đăng Nhập -->
+    <div id="login-screen" class="login-container">
+        <div class="login-box">
+            <h2>Đăng Nhập</h2>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+            <button onclick="checkPassword()">Đăng Nhập</button>
+            <div id="login-message" style="color: red; text-align: center;"></div>
+        </div>
+    </div>
+
+    <!-- Màn hình chính (ẩn lúc đầu) -->
+    <div id="main-screen" class="container" style="display: none;">
         <h1>Nhập Dữ liệu Tăng ca</h1>
         <form id="overtimeForm">
             <div class="input-group">
@@ -157,11 +190,26 @@
         <div id="current-time"></div>
 
         <!-- Link truy cập Google Sheets -->
-        <a href="https://docs.google.com/spreadsheets/d/<spreadsheet-id>/edit" target="_blank" class="access-link">Truy Cập Google Sheets</a>
+        <a href="https://docs.google.com/spreadsheets/d/1z44upLTngbIMpcU0u_FDgdpBONas5uEf-_adal6tdSg/edit?usp=sharing" target="_blank" class="access-link">Truy Cập Google Sheets</a>
     </div>
 
     <script>
-        // Hàm cập nhật thời gian hiện tại
+        // Hàm kiểm tra mật khẩu
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
+            const loginMessage = document.getElementById('login-message');
+            
+            if (passwordInput === correctPassword) {
+                document.getElementById('login-screen').style.display = 'none'; // Ẩn màn hình đăng nhập
+                document.getElementById('main-screen').style.display = 'block'; // Hiện màn hình chính
+                updateTime(); // Hiển thị thời gian thực
+            } else {
+                loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
+            }
+        }
+
+        // Hàm cập nhật thời gian thực
         function updateTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -173,7 +221,7 @@
             document.getElementById('current-time').textContent = `Ngày: ${day}/${month}/${year} - Giờ: ${hours}:${minutes}:${seconds}`;
         }
 
-        setInterval(updateTime, 1000); // Cập nhật mỗi giây
+        setInterval(updateTime, 1000); // Cập nhật thời gian mỗi giây
 
         // Xử lý sự kiện khi form được gửi
         document.getElementById('overtimeForm').addEventListener('submit', function(event) {
