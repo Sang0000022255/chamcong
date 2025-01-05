@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhập Dữ liệu Tăng ca</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.6/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -86,6 +85,21 @@
         .download-btn:hover {
             background-color: #007bb5;
         }
+        .access-link {
+            background-color: #FF9800;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: block;
+            width: 100%;
+            font-size: 16px;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .access-link:hover {
+            background-color: #f57c00;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +139,8 @@
 
         <div id="current-time"></div>
 
-        <button class="download-btn" onclick="downloadExcel()">Tải xuống file Excel</button>
+        <!-- Link truy cập Google Sheets -->
+        <a href="https://docs.google.com/spreadsheets/d/1z44upLTngbIMpcU0u_FDgdpBONas5uEf-_adal6tdSg/edit?usp=sharing" target="_blank" class="access-link">Truy Cập Google Sheets</a>
     </div>
 
     <script>
@@ -142,20 +157,6 @@
         }
 
         setInterval(updateTime, 1000); // Cập nhật mỗi giây
-
-        // Hàm tải xuống file Excel
-        function downloadExcel() {
-            const formData = new FormData(document.getElementById('overtimeForm'));
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            const worksheet = XLSX.utils.json_to_sheet([data]);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Dữ liệu Tăng ca");
-            XLSX.writeFile(workbook, "du_lieu_tang_ca.xlsx");
-        }
 
         // Xử lý sự kiện khi form được gửi
         document.getElementById('overtimeForm').addEventListener('submit', function(event) {
