@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tìm kiếm nhân viên và hiển thị thông tin</title>
+    <title>Tìm kiếm và thêm dữ liệu nhân viên</title>
     <style>
         table {
             width: 100%;
@@ -17,10 +17,13 @@
             padding: 10px;
             text-align: left;
         }
+        #addDataForm {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>Tìm kiếm nhân viên</h1>
+    <h1>Tìm kiếm và thêm dữ liệu nhân viên</h1>
     <form id="searchForm">
         <label for="searchType">Tìm kiếm theo:</label>
         <select id="searchType" name="searchType" required>
@@ -34,10 +37,23 @@
 
     <div id="resultContainer"></div>
 
+    <form id="addDataForm">
+        <h2>Thêm dữ liệu nhân viên mới</h2>
+        <label for="newMSNV">MSNV:</label>
+        <input type="text" id="newMSNV" name="MSNV" required><br><br>
+        <label for="newName">Tên:</label>
+        <input type="text" id="newName" name="name" required><br><br>
+        <label for="newPosition">Vị trí:</label>
+        <input type="text" id="newPosition" name="position"><br><br>
+        <label for="newDepartment">Phòng ban:</label>
+        <input type="text" id="newDepartment" name="department"><br><br>
+        <button type="submit">Thêm dữ liệu</button>
+    </form>
+
     <script>
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7'; // Thay thế bằng URL webhook của bạn
+            const webhookUrl = 'https://hook.make.com/your-webhook-id'; // Thay thế bằng URL webhook của bạn
             const formData = new FormData(event.target);
             const data = {};
             formData.forEach((value, key) => {
@@ -56,7 +72,8 @@
                 if (result && result.length > 0) {
                     displayResults(result);
                 } else {
-                    alert('Không tìm thấy dữ liệu.');
+                    alert('Không tìm thấy dữ liệu. Vui lòng nhập dữ liệu mới.');
+                    showAddDataForm(data.searchQuery, data.searchType);
                 }
             })
             .catch(error => {
@@ -73,16 +90,56 @@
                 const currentTime = new Date().toLocaleString();
                 
                 table.innerHTML = `
-                    <tr><th>MSNV</th><td>${person.MSNV}</td></tr>
-                    <tr><th>Tên</th><td>${person.name}</td></tr>
-                    <tr><th>Vị trí</th><td>${person.position}</td></tr>
-                    <tr><th>Phòng ban</th><td>${person.department}</td></tr>
-                    <tr><th>Ngày giờ hiện tại</th><td>${currentTime}</td></tr>
+                    <tr><th>Mã NV</th><td>${person.MSNV}</td></tr>
+                    <tr><th>Họ Và Tên</th><td>${person.name}</td></tr>
+                    <tr><th>Giờ tăng ca</th><td>${person.position}</td></tr>
+                    <tr><th>Thời gian thực</th><td>${person.department}</td></tr>
+                
                 `;
                 
                 container.appendChild(table);
             });
         }
+
+        function showAddDataForm(query, type) {
+            const form = document.getElementById('addDataForm');
+            form.style.display = 'block';
+            if (type === 'MSNV') {
+                document.getElementById('newMSNV').value = query;
+            } else {
+                document.getElementById('newName').value = query;
+            }
+        }
+
+        document.getElementById('addDataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7'; // Thay thế bằng URL webhook của bạn
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Dữ liệu mới đã được thêm thành công!');
+                    event.target.reset();
+                    event.target.style.display = 'none';
+                } else {
+                    alert('Có lỗi xảy ra khi thêm dữ liệu.');
+                }
+            })
+            .catch(error => {
+                alert('Có lỗi xảy ra: ' + error.message);
+            });
+        });
     </script>
 </body>
 </html>
