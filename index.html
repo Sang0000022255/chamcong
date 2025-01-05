@@ -107,13 +107,21 @@
         <h1>Nhập Dữ liệu Tăng ca</h1>
         <form id="overtimeForm">
             <div class="input-group">
-                <label for="employeeId">Mã NV (8 chữ số):</label>
-                <input type="text" id="employeeId" name="Mã NV" pattern="\d{8}" title="Mã nhân viên phải là 8 chữ số" required>
+                <label for="employeeId">Mã NV:</label>
+                <select id="employeeId" name="Mã NV" required>
+                    <option value="20210285">20210285</option>
+                    <option value="20210041">20210041</option>
+                    <option value="20210018">20210018</option>
+                </select>
             </div>
 
             <div class="input-group">
                 <label for="fullName">Họ Và Tên:</label>
-                <input type="text" id="fullName" name="Họ Và Tên" required>
+                <select id="fullName" name="Họ Và Tên" required>
+                    <option value="Võ Trung Anh Vũ">Võ Trung Anh Vũ</option>
+                    <option value="Lê Nguyễn Mỹ Phụng">Lê Nguyễn Mỹ Phụng</option>
+                    <option value="Lê Thanh Xuân">Lê Thanh Xuân</option>
+                </select>
             </div>
 
             <div class="input-group">
@@ -133,6 +141,15 @@
                 </select>
             </div>
 
+            <div class="input-group">
+                <label for="shift">Ca làm:</label>
+                <select id="shift" name="Ca làm" required>
+                    <option value="Ca 1">Ca 1</option>
+                    <option value="Ca 2">Ca 2</option>
+                    <option value="Ca 3">Ca 3</option>
+                </select>
+            </div>
+
             <button type="submit">Nhập Dữ liệu</button>
             <div class="form-message" id="formMessage"></div>
         </form>
@@ -140,7 +157,7 @@
         <div id="current-time"></div>
 
         <!-- Link truy cập Google Sheets -->
-        <a href="https://docs.google.com/spreadsheets/d/1z44upLTngbIMpcU0u_FDgdpBONas5uEf-_adal6tdSg/edit?usp=sharing" target="_blank" class="access-link">Truy Cập Google Sheets</a>
+        <a href="https://docs.google.com/spreadsheets/d/<spreadsheet-id>/edit" target="_blank" class="access-link">Truy Cập Google Sheets</a>
     </div>
 
     <script>
