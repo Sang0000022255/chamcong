@@ -11,9 +11,9 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
         }
         .container {
             background-color: #fff;
@@ -69,13 +69,45 @@
             margin-top: 20px;
             color: #333;
         }
-        iframe {
+        .access-link {
+            background-color: #FF9800;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: block;
             width: 100%;
-            height: 500px;
+            font-size: 16px;
             border: none;
             margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .access-link:hover {
+            background-color: #f57c00;
+        }
+        .suggestions {
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            width: 100%;
+            background-color: white;
+            z-index: 999;
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+        .selected-employee {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -87,6 +119,11 @@
                 <label for="searchInput">Tìm kiếm (Mã NV hoặc Họ và Tên):</label>
                 <input type="text" id="searchInput" placeholder="Nhập mã NV hoặc tên" autocomplete="off" required>
                 <div class="suggestions" id="suggestions"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="selectedEmployee">Thông tin nhân viên:</label>
+                <div id="selectedEmployee" class="selected-employee"></div>
             </div>
 
             <div class="input-group">
@@ -121,8 +158,7 @@
 
         <div id="current-time"></div>
 
-        <!-- Nhúng Google Sheets -->
-        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTsT_bGLLTA96c3YEM7PFUloRXX4mEcVsfCiD8wLEUH6GRRHvSd2JZBuZxlRhIGuSXpZbFkcGR2Qr2r/pubhtml?gid=0&single=true"></iframe>
+        <a href="https://docs.google.com/spreadsheets/d/1z44upLTngbIMpcU0u_FDgdpBONas5uEf-_adal6tdSg/edit?usp=sharing" target="_blank" class="access-link">Truy Cập Google Sheets</a>
     </div>
 
     <script>
@@ -134,6 +170,7 @@
 
         const searchInput = document.getElementById('searchInput');
         const suggestions = document.getElementById('suggestions');
+        const selectedEmployee = document.getElementById('selectedEmployee');
 
         searchInput.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
@@ -149,6 +186,7 @@
                     suggestion.textContent = `${emp.id} - ${emp.name}`;
                     suggestion.addEventListener('click', () => {
                         searchInput.value = emp.id;
+                        selectedEmployee.textContent = `${emp.id} - ${emp.name}`;
                         suggestions.innerHTML = '';
                     });
                     suggestions.appendChild(suggestion);
@@ -162,7 +200,6 @@
             }
         });
 
-        // Hàm cập nhật thời gian thực
         function updateTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -174,7 +211,7 @@
             document.getElementById('current-time').textContent = `Ngày: ${day}/${month}/${year} - Giờ: ${hours}:${minutes}:${seconds}`;
         }
 
-        setInterval(updateTime, 1000); // Cập nhật thời gian mỗi giây
+        setInterval(updateTime, 1000);
     </script>
 </body>
 </html>
