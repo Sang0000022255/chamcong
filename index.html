@@ -42,12 +42,6 @@
             border: 1px solid #ccc;
             font-size: 14px;
         }
-        input[type="text"], input[type="number"] {
-            font-size: 16px;
-        }
-        select {
-            font-size: 16px;
-        }
         button {
             background-color: #4CAF50;
             color: white;
@@ -72,19 +66,6 @@
             margin-top: 20px;
             color: #333;
         }
-        .download-btn {
-            background-color: #008CBA;
-            padding: 10px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            font-size: 16px;
-        }
-        .download-btn:hover {
-            background-color: #007bb5;
-        }
         .access-link {
             background-color: #FF9800;
             color: white;
@@ -100,44 +81,18 @@
         .access-link:hover {
             background-color: #f57c00;
         }
-
-        /* Style for the login screen */
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-box {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .login-box input {
-            margin-bottom: 15px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Màn hình Đăng Nhập -->
-    <div id="login-screen" class="login-container">
-        <div class="login-box">
-            <h2>Đăng Nhập</h2>
-            <label for="password">Mật khẩu:</label>
-            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
-            <button onclick="checkPassword()">Đăng Nhập</button>
-            <div id="login-message" style="color: red; text-align: center;"></div>
-        </div>
-    </div>
-
-    <!-- Màn hình chính (ẩn lúc đầu) -->
-    <div id="main-screen" class="container" style="display: none;">
+    <div id="main-screen" class="container">
         <h1>Nhập Dữ liệu Tăng ca</h1>
+        
+        <div class="input-group">
+            <label for="searchEmployee">Tìm kiếm nhân viên (Mã hoặc Tên):</label>
+            <input type="text" id="searchEmployee" placeholder="Nhập mã hoặc tên nhân viên" oninput="filterEmployee()">
+        </div>
+        
         <form id="overtimeForm">
             <div class="input-group">
                 <label for="employeeId">Mã NV:</label>
@@ -189,24 +144,34 @@
 
         <div id="current-time"></div>
 
-        <!-- Link truy cập Google Sheets -->
         <a href="https://docs.google.com/spreadsheets/d/1z44upLTngbIMpcU0u_FDgdpBONas5uEf-_adal6tdSg/edit?usp=sharing" target="_blank" class="access-link">Truy Cập Google Sheets</a>
     </div>
 
     <script>
-        // Hàm kiểm tra mật khẩu
-        function checkPassword() {
-            const passwordInput = document.getElementById('password').value;
-            const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
-            const loginMessage = document.getElementById('login-message');
-            
-            if (passwordInput === correctPassword) {
-                document.getElementById('login-screen').style.display = 'none'; // Ẩn màn hình đăng nhập
-                document.getElementById('main-screen').style.display = 'block'; // Hiện màn hình chính
-                updateTime(); // Hiển thị thời gian thực
-            } else {
-                loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-            }
+        const employeeData = [
+            { id: '20210285', name: 'Võ Trung Anh Vũ' },
+            { id: '20210041', name: 'Lê Nguyễn Mỹ Phụng' },
+            { id: '20210018', name: 'Lê Thanh Xuân' },
+        ];
+
+        function filterEmployee() {
+            const searchValue = document.getElementById('searchEmployee').value.toLowerCase();
+            const filteredData = employeeData.filter(emp => 
+                emp.id.toLowerCase().includes(searchValue) || emp.name.toLowerCase().includes(searchValue)
+            );
+
+            const idSelect = document.getElementById('employeeId');
+            const nameSelect = document.getElementById('fullName');
+
+            idSelect.innerHTML = '';
+            nameSelect.innerHTML = '';
+
+            filteredData.forEach(emp => {
+                const idOption = new Option(emp.id, emp.id);
+                const nameOption = new Option(emp.name, emp.name);
+                idSelect.add(idOption);
+                nameSelect.add(nameOption);
+            });
         }
 
         // Hàm cập nhật thời gian thực
