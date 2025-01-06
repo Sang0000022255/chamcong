@@ -11,9 +11,9 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
         .container {
             background-color: #fff;
@@ -42,6 +42,9 @@
             border: 1px solid #ccc;
             font-size: 14px;
         }
+        input[type="text"], input[type="number"] {
+            font-size: 16px;
+        }
         button {
             background-color: #4CAF50;
             color: white;
@@ -66,50 +69,24 @@
             margin-top: 20px;
             color: #333;
         }
-        .access-link {
-            background-color: #FF9800;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            display: block;
+        iframe {
             width: 100%;
-            font-size: 16px;
+            height: 500px;
             border: none;
             margin-top: 20px;
-            cursor: pointer;
-        }
-        .access-link:hover {
-            background-color: #f57c00;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-
     <div id="main-screen" class="container">
         <h1>Nhập Dữ liệu Tăng ca</h1>
-        
-        <div class="input-group">
-            <label for="searchEmployee">Tìm kiếm nhân viên (Mã hoặc Tên):</label>
-            <input type="text" id="searchEmployee" placeholder="Nhập mã hoặc tên nhân viên" oninput="filterEmployee()">
-        </div>
-        
         <form id="overtimeForm">
             <div class="input-group">
-                <label for="employeeId">Mã NV:</label>
-                <select id="employeeId" name="Mã NV" required>
-                    <option value="20210285">20210285</option>
-                    <option value="20210041">20210041</option>
-                    <option value="20210018">20210018</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="fullName">Họ Và Tên:</label>
-                <select id="fullName" name="Họ Và Tên" required>
-                    <option value="Võ Trung Anh Vũ">Võ Trung Anh Vũ</option>
-                    <option value="Lê Nguyễn Mỹ Phụng">Lê Nguyễn Mỹ Phụng</option>
-                    <option value="Lê Thanh Xuân">Lê Thanh Xuân</option>
-                </select>
+                <label for="searchInput">Tìm kiếm (Mã NV hoặc Họ và Tên):</label>
+                <input type="text" id="searchInput" placeholder="Nhập mã NV hoặc tên" autocomplete="off" required>
+                <div class="suggestions" id="suggestions"></div>
             </div>
 
             <div class="input-group">
@@ -144,35 +121,46 @@
 
         <div id="current-time"></div>
 
-        <a href="https://docs.google.com/spreadsheets/d/1z44upLTngbIMpcU0u_FDgdpBONas5uEf-_adal6tdSg/edit?usp=sharing" target="_blank" class="access-link">Truy Cập Google Sheets</a>
+        <!-- Nhúng Google Sheets -->
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT-vS1zG2Hme7Fz-MQy8q8_5EFpsXEYXK5U6jUBrXtN0lR9FgY_abcde1234567/pubhtml?widget=true&amp;headers=false"></iframe>
     </div>
 
     <script>
         const employeeData = [
-            { id: '20210285', name: 'Võ Trung Anh Vũ' },
-            { id: '20210041', name: 'Lê Nguyễn Mỹ Phụng' },
-            { id: '20210018', name: 'Lê Thanh Xuân' },
+            { id: "20210285", name: "Võ Trung Anh Vũ" },
+            { id: "20210041", name: "Lê Nguyễn Mỹ Phụng" },
+            { id: "20210018", name: "Lê Thanh Xuân" }
         ];
 
-        function filterEmployee() {
-            const searchValue = document.getElementById('searchEmployee').value.toLowerCase();
-            const filteredData = employeeData.filter(emp => 
-                emp.id.toLowerCase().includes(searchValue) || emp.name.toLowerCase().includes(searchValue)
-            );
+        const searchInput = document.getElementById('searchInput');
+        const suggestions = document.getElementById('suggestions');
 
-            const idSelect = document.getElementById('employeeId');
-            const nameSelect = document.getElementById('fullName');
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+            suggestions.innerHTML = '';
 
-            idSelect.innerHTML = '';
-            nameSelect.innerHTML = '';
+            if (query) {
+                const filteredData = employeeData.filter(emp =>
+                    emp.id.includes(query) || emp.name.toLowerCase().includes(query)
+                );
 
-            filteredData.forEach(emp => {
-                const idOption = new Option(emp.id, emp.id);
-                const nameOption = new Option(emp.name, emp.name);
-                idSelect.add(idOption);
-                nameSelect.add(nameOption);
-            });
-        }
+                filteredData.forEach(emp => {
+                    const suggestion = document.createElement('div');
+                    suggestion.textContent = `${emp.id} - ${emp.name}`;
+                    suggestion.addEventListener('click', () => {
+                        searchInput.value = emp.id;
+                        suggestions.innerHTML = '';
+                    });
+                    suggestions.appendChild(suggestion);
+                });
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target !== searchInput) {
+                suggestions.innerHTML = '';
+            }
+        });
 
         // Hàm cập nhật thời gian thực
         function updateTime() {
@@ -187,36 +175,6 @@
         }
 
         setInterval(updateTime, 1000); // Cập nhật thời gian mỗi giây
-
-        // Xử lý sự kiện khi form được gửi
-        document.getElementById('overtimeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7'; // Thay thế bằng URL webhook của bạn
-            const formData = new FormData(event.target);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Dữ liệu đã được nhập thành công!');
-                    event.target.reset();
-                } else {
-                    alert('Có lỗi xảy ra khi nhập dữ liệu.');
-                }
-            })
-            .catch(error => {
-                alert('Có lỗi xảy ra: ' + error.message);
-            });
-        });
     </script>
 </body>
 </html>
