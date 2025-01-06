@@ -122,8 +122,13 @@
             </div>
 
             <div class="input-group">
-                <label for="selectedEmployee">Thông tin nhân viên:</label>
-                <div id="selectedEmployee" class="selected-employee"></div>
+                <label for="employeeId">Mã Nhân Viên:</label>
+                <div id="employeeId" class="selected-employee"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="employeeName">Họ Và Tên:</label>
+                <div id="employeeName" class="selected-employee"></div>
             </div>
 
             <div class="input-group">
@@ -170,7 +175,8 @@
 
         const searchInput = document.getElementById('searchInput');
         const suggestions = document.getElementById('suggestions');
-        const selectedEmployee = document.getElementById('selectedEmployee');
+        const employeeId = document.getElementById('employeeId');
+        const employeeName = document.getElementById('employeeName');
 
         searchInput.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
@@ -186,7 +192,8 @@
                     suggestion.textContent = `${emp.id} - ${emp.name}`;
                     suggestion.addEventListener('click', () => {
                         searchInput.value = emp.id;
-                        selectedEmployee.textContent = `${emp.id} - ${emp.name}`;
+                        employeeId.textContent = emp.id;
+                        employeeName.textContent = emp.name;
                         suggestions.innerHTML = '';
                     });
                     suggestions.appendChild(suggestion);
