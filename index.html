@@ -232,17 +232,19 @@
       //  }
         
     // Hàm kiểm tra mật khẩu
+   <script>
+    // Hàm kiểm tra mật khẩu
     function checkPassword() {
         const passwordInput = document.getElementById('password').value;
         const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
-        const loginMessage = document.getElementById('login-message');
         
         if (passwordInput === correctPassword) {
-            loginMessage.textContent = 'Hệ thống hiện dang dừng vui lòng chờ.';
+            alert('  Thông Báo Hệ Thống : Hiện tại, hệ thống đang gặp sự cố kỹ thuật. Chúng tôi xin lỗi vì sự bất tiện này. Đội ngũ kỹ thuật đang nỗ lực giải quyết vấn đề trong thời gian sớm nhất.Xin chân thành cảm ơn.NTS ');
         } else {
-            loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
+            alert('Mật khẩu không đúng. Vui lòng thử lại.');
         }
     }
+
 
         // Hàm cập nhật thời gian thực
         function updateTime() {
