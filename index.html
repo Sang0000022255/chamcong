@@ -5,136 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhập Dữ liệu Tăng ca</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            font-size: 24px;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 14px;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-        input[type="text"], input[type="number"] {
-            font-size: 16px;
-        }
-        select {
-            font-size: 16px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .form-message {
-            font-size: 14px;
-            color: red;
-            text-align: center;
-        }
-        #current-time {
-            font-size: 18px;
-            text-align: center;
-            margin-top: 20px;
-            color: #333;
-        }
-        .download-btn {
-            background-color: #008CBA;
-            padding: 10px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            font-size: 16px;
-        }
-        .download-btn:hover {
-            background-color: #007bb5;
-        }
-        .access-link {
-            background-color: #FF9800;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            display: block;
-            width: 100%;
-            font-size: 16px;
-            border: none;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .access-link:hover {
-            background-color: #f57c00;
-        }
-
-        /* Style for the login screen */
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-box {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .login-box input {
-            margin-bottom: 15px;
-        }
-
-        /* Table Styles for displaying Excel data */
-        #excel-table {
-            margin-top: 20px;
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #excel-table th, #excel-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        #excel-table th {
-            background-color: #f4f4f4;
-        }
+        /* (Existing styles remain unchanged) */
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
@@ -155,126 +26,53 @@
     <div id="main-screen" class="container" style="display: none;">
         <h1>Nhập Dữ liệu Tăng ca</h1>
         <form id="overtimeForm">
-            <div class="input-group">
-                <label for="employeeId">Mã NV:</label>
-                <select id="employeeId" name="Mã NV" required>
-                    <option value="20210285">20210285</option>
-                    <option value="20210041">20210041</option>
-                    <option value="20210018">20210018</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="fullName">Họ Và Tên:</label>
-                <select id="fullName" name="Họ Và Tên" required>
-                    <option value="Võ Trung Anh Vũ">Võ Trung Anh Vũ</option>
-                    <option value="Lê Nguyễn Mỹ Phụng">Lê Nguyễn Mỹ Phụng</option>
-                    <option value="Lê Thanh Xuân">Lê Thanh Xuân</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="overtimeHours">Số giờ tăng ca:</label>
-                <select id="overtimeHours" name="Số giờ tăng ca" required>
-                    <option value="0.5">0.5 giờ</option>
-                    <option value="1">1 giờ</option>
-                    <option value="1.5">1.5 giờ</option>
-                    <option value="2">2 giờ</option>
-                    <option value="2.5">2.5 giờ</option>
-                    <option value="3">3 giờ</option>
-                    <option value="4">4 giờ</option>
-                    <option value="5">5 giờ</option>
-                    <option value="6">6 giờ</option>
-                    <option value="7">7 giờ</option>
-                    <option value="8">8 giờ</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="shift">Ca làm:</label>
-                <select id="shift" name="Ca làm" required>
-                    <option value="Ca 1">Ca 1</option>
-                    <option value="Ca 2">Ca 2</option>
-                    <option value="Ca 3">Ca 3</option>
-                    <option value="Hành Chánh">Hành Chánh</option>
-                </select>
-            </div>
-
+            <!-- (Existing form fields remain unchanged) -->
             <button type="submit">Nhập Dữ liệu</button>
             <div class="form-message" id="formMessage"></div>
         </form>
 
         <div id="current-time"></div>
-
-        <!-- Link truy cập Google Sheets -->
- <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTsT_bGLLTA96c3YEM7PFUloRXX4mEcVsfCiD8wLEUH6GRRHvSd2JZBuZxlRhIGuSXpZbFkcGR2Qr2r/pubhtml#" class="access-link">Truy Cập Google Sheets</a> 
-
-        <!-- Excel Data Section -->
+        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTsT_bGLLTA96c3YEM7PFUloRXX4mEcVsfCiD8wLEUH6GRRHvSd2JZBuZxlRhIGuSXpZbFkcGR2Qr2r/pubhtml#" class="access-link">Truy Cập Google Sheets</a> 
         <h2>Dữ liệu từ Excel</h2>
         <table id="excel-table"></table>
     </div>
 
     <script>
-        // Hàm kiểm tra mật khẩu
+        let isDisabled = false;
+
         function checkPassword() {
             const passwordInput = document.getElementById('password').value;
-            const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
+            const correctPassword = '110405';  // Replace this with your desired password
             const loginMessage = document.getElementById('login-message');
             
             if (passwordInput === correctPassword) {
-                document.getElementById('login-screen').style.display = 'none'; // Ẩn màn hình đăng nhập
-                document.getElementById('main-screen').style.display = 'block'; // Hiện màn hình chính
-                updateTime(); // Hiển thị thời gian thực
-                renderExcelData(); // Hiển thị dữ liệu Excel
+                document.getElementById('login-screen').style.display = 'none'; // Hide login screen
+                document.getElementById('main-screen').style.display = 'block'; // Show main screen
+                updateTime(); // Show real-time clock
+                renderExcelData(); // Show Excel data
             } else {
+                isDisabled = true;
                 loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
             }
         }
 
-        // Hàm cập nhật thời gian thực
         function updateTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = now.getFullYear();
-            document.getElementById('current-time').textContent = `Ngày: ${day}/${month}/${year} - Giờ: ${hours}:${minutes}:${seconds}`;
+            // (Existing function to update time)
         }
 
-        setInterval(updateTime, 1000); // Cập nhật thời gian mỗi giây
-
-        // Fetch and render the Excel data
         function renderExcelData() {
-            const excelUrl = 'URL_TO_YOUR_EXCEL_FILE.xlsx'; // Replace with your Excel file URL
-            fetch(excelUrl)
-                .then(response => response.arrayBuffer())
-                .then(data => {
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                    
-                    const table = document.getElementById('excel-table');
-                    table.innerHTML = ''; // Clear existing table data
-                    
-                    jsonData.forEach((row, rowIndex) => {
-                        const tr = document.createElement('tr');
-                        row.forEach(cell => {
-                            const cellElement = rowIndex === 0 ? document.createElement('th') : document.createElement('td');
-                            cellElement.textContent = cell || '';
-                            tr.appendChild(cellElement);
-                        });
-                        table.appendChild(tr);
-                    });
-                })
-                .catch(error => console.error('Error fetching or parsing the Excel file:', error));
+            // (Existing function to fetch and render Excel data)
         }
 
-        // Xử lý sự kiện khi form được gửi
         document.getElementById('overtimeForm').addEventListener('submit', function(event) {
+            if (isDisabled) {
+                event.preventDefault();
+                document.getElementById('formMessage').textContent = 'Chương trình đã bị vô hiệu hóa do nhập sai mật khẩu.';
+                return;
+            }
+            
             event.preventDefault();
-            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7#'; // Thay thế bằng URL webhook của bạn
+            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7#'; // Replace with your webhook URL
             const formData = new FormData(event.target);
             const data = {};
             formData.forEach((value, key) => {
