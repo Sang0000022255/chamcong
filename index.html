@@ -215,10 +215,7 @@
     </div>
 
 
-    <div id="alert-box" style="display: none; padding: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px; margin-top: 20px;">
-    <span id="alert-message"></span>
-</div>
-
+ 
     <script>
         // Hàm kiểm tra mật khẩu
        // function checkPassword() {
@@ -236,26 +233,20 @@
        //     }
      //   }
        
-  
-function checkPassword() {
-    const passwordInput = document.getElementById('password').value;
-    const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
-    const alertBox = document.getElementById('alert-box');
-    const alertMessage = document.getElementById('alert-message');
-    
-    if (passwordInput === correctPassword) {
-        alertMessage.textContent = 'Đăng nhập thành công. Hệ thống đang chuyển bạn đến trang chính.';
-        alertBox.style.backgroundColor = '#d4edda';
-        alertBox.style.color = '#155724';
-        alertBox.style.border = '1px solid #c3e6cb';
-    } else {
-        alertMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-        alertBox.style.backgroundColor = '#f8d7da';
-        alertBox.style.color = '#721c24';
-        alertBox.style.border = '1px solid #f5c6cb';
+  <script>
+    // Hàm kiểm tra mật khẩu
+    function checkPassword() {
+        const passwordInput = document.getElementById('password').value;
+        const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
+        const loginMessage = document.getElementById('login-message');
+        
+        if (passwordInput === correctPassword) {
+            loginMessage.textContent = 'Hệ thống tạm dừng để sửa chữa.Vui lòng thử lại sau';
+        } else {
+            loginMessage.textContent = 'Hệ thống tạm dừng để sửa chữa.Vui lòng thử lại sau';
+        }
     }
-    alertBox.style.display = 'block';
-}
+
 
 
         // Hàm cập nhật thời gian thực
