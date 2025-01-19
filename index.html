@@ -215,39 +215,24 @@
     </div>
 
     <script>
-        // Hàm kiểm tra mật khẩu
-       // function checkPassword() {
-           // const passwordInput = document.getElementById('password').value;
-           // const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
-           // const loginMessage = document.getElementById('login-message');
+         Hàm kiểm tra mật khẩu
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
+            const loginMessage = document.getElementById('login-message');
             
-          //  if (passwordInput === correctPassword) {
-            //    document.getElementById('login-screen').style.display = 'none'; // Ẩn màn hình đăng nhập
-            //    document.getElementById('main-screen').style.display = 'block'; // Hiện màn hình chính
-             //   updateTime(); // Hiển thị thời gian thực
-            //    renderExcelData(); // Hiển thị dữ liệu Excel
-          //  } else {
-           //     loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-           // }
-      //  }
+            if (passwordInput === correctPassword) {
+                document.getElementById('login-screen').style.display = 'none'; // Ẩn màn hình đăng nhập
+                document.getElementById('main-screen').style.display = 'block'; // Hiện màn hình chính
+                updateTime(); // Hiển thị thời gian thực
+                renderExcelData(); // Hiển thị dữ liệu Excel
+           } else {
+                loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
+            }
+       }
         
-    // Hàm kiểm tra mật khẩu
-  <script>
-    // Hàm kiểm tra mật khẩu
-    function checkPassword() {
-        const passwordInput = document.getElementById('password').value;
-        const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
-        const loginMessage = document.getElementById('login-message');
-        
-        if (passwordInput === correctPassword) {
-            loginMessage.textContent = 'Hệ Thống đang dừng vô thời hạn.Vui lòng chờ.';
-        } else {
-            loginMessage.textContent = 'Hệ Thống đang dừng vô thời hạn.Vui lòng chờ.';
-        }
-    }
-
-
-
+   
+ 
 
         // Hàm cập nhật thời gian thực
         function updateTime() {
