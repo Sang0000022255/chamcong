@@ -4,308 +4,189 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhập Dữ liệu Tăng ca UD v1</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-        .container {
-            background-color: #fff;
+        .container, .login-box {
+            background-color: white;
+            padding: 20px;
             border-radius: 8px;
-            padding: 30px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
         }
-        h1 {
+        h1, h2 {
             text-align: center;
-            color: #333;
-            font-size: 24px;
+            font-size: 20px;
         }
-        label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 14px;
-        }
-        input, select, button {
+        label, input, select, button {
             width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
             font-size: 14px;
-        }
-        input[type="text"], input[type="number"] {
-            font-size: 16px;
-        }
-        select {
-            font-size: 16px;
         }
         button {
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 16px;
         }
         button:hover {
             background-color: #45a049;
         }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .form-message {
-            font-size: 14px;
-            color: red;
-            text-align: center;
-        }
         #current-time {
-            font-size: 18px;
             text-align: center;
-            margin-top: 20px;
-            color: #333;
-        }
-        .download-btn {
-            background-color: #008CBA;
-            padding: 10px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
             font-size: 16px;
+            margin-top: 15px;
         }
-        .download-btn:hover {
-            background-color: #007bb5;
-        }
-        .access-link {
-            background-color: #FF9800;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            display: block;
-            width: 100%;
-            font-size: 16px;
-            border: none;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .access-link:hover {
-            background-color: #f57c00;
-        }
-
-        /* Style for the login screen */
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-box {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .login-box input {
-            margin-bottom: 15px;
-        }
-
-        /* Table Styles for displaying Excel data */
         #excel-table {
-            margin-top: 20px;
             width: 100%;
             border-collapse: collapse;
+            margin-top: 15px;
         }
         #excel-table th, #excel-table td {
             border: 1px solid #ddd;
             padding: 8px;
-            text-align: left;
         }
         #excel-table th {
             background-color: #f4f4f4;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 <body>
 
-    <!-- Màn hình Đăng Nhập -->
-    <div id="login-screen" class="login-container">
-        <div class="login-box">
-            <h2>Đăng Nhập</h2>
-            <label for="password">Mật khẩu:</label>
-            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
-            <button onclick="checkPassword()">Đăng Nhập</button>
-            <div id="login-message" style="color: red; text-align: center;"></div>
-        </div>
+    <!-- Màn hình đăng nhập -->
+    <div id="login-screen" class="container">
+        <h2>Đăng Nhập</h2>
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" placeholder="Nhập mật khẩu">
+        <button onclick="checkPassword()">Đăng Nhập</button>
+        <p id="login-message" style="color: red; text-align: center;"></p>
     </div>
 
-    <!-- Màn hình chính (ẩn lúc đầu) -->
+    <!-- Màn hình chính -->
     <div id="main-screen" class="container" style="display: none;">
         <h1>Nhập Dữ liệu Tăng ca</h1>
         <form id="overtimeForm">
-            <div class="input-group">
-                <label for="employeeId">Mã NV:</label>
-                <select id="employeeId" name="Mã NV" required>
-                    <option value="20210285">20210285</option>
-                    <option value="20210041">20210041</option>
-                    <option value="20210018">20210018</option>
-                </select>
-            </div>
+            <label for="employeeId">Mã NV:</label>
+            <select id="employeeId">
+                <option value="20210285">20210285</option>
+                <option value="20210041">20210041</option>
+                <option value="20210018">20210018</option>
+            </select>
 
-            <div class="input-group">
-                <label for="fullName">Họ Và Tên:</label>
-                <select id="fullName" name="Họ Và Tên" required>
-                    <option value="Võ Trung Anh Vũ">Võ Trung Anh Vũ</option>
-                    <option value="Lê Nguyễn Mỹ Phụng">Lê Nguyễn Mỹ Phụng</option>
-                    <option value="Lê Thanh Xuân">Lê Thanh Xuân</option>
-                </select>
-            </div>
+            <label for="fullName">Họ Và Tên:</label>
+            <select id="fullName">
+                <option value="Võ Trung Anh Vũ">Võ Trung Anh Vũ</option>
+                <option value="Lê Nguyễn Mỹ Phụng">Lê Nguyễn Mỹ Phụng</option>
+                <option value="Lê Thanh Xuân">Lê Thanh Xuân</option>
+            </select>
 
-            <div class="input-group">
-                <label for="overtimeHours">Số giờ tăng ca:</label>
-                <select id="overtimeHours" name="Số giờ tăng ca" required>
-                    <option value="0.5">0.5 giờ</option>
-                    <option value="1">1 giờ</option>
-                    <option value="1.5">1.5 giờ</option>
-                    <option value="2">2 giờ</option>
-                    <option value="2.5">2.5 giờ</option>
-                    <option value="3">3 giờ</option>
-                    <option value="4">4 giờ</option>
-                    <option value="5">5 giờ</option>
-                    <option value="6">6 giờ</option>
-                    <option value="7">7 giờ</option>
-                    <option value="8">8 giờ</option>
-                </select>
-            </div>
+            <label for="overtimeHours">Số giờ tăng ca:</label>
+            <select id="overtimeHours">
+                <option value="0.5">0.5 giờ</option>
+                <option value="1">1 giờ</option>
+                <option value="1.5">1.5 giờ</option>
+                <option value="2">2 giờ</option>
+                <option value="3">3 giờ</option>
+            </select>
 
-            <div class="input-group">
-                <label for="shift">Ca làm:</label>
-                <select id="shift" name="Ca làm" required>
-                    <option value="Ca 1">Ca 1</option>
-                    <option value="Ca 2">Ca 2</option>
-                    <option value="Ca 3">Ca 3</option>
-                    <option value="Hành Chánh">Hành Chánh</option>
-                </select>
-            </div>
+            <label for="shift">Ca làm:</label>
+            <select id="shift">
+                <option value="Ca 1">Ca 1</option>
+                <option value="Ca 2">Ca 2</option>
+                <option value="Ca 3">Ca 3</option>
+                <option value="Hành Chánh">Hành Chánh</option>
+            </select>
 
             <button type="submit">Nhập Dữ liệu</button>
-            <div class="form-message" id="formMessage"></div>
         </form>
 
         <div id="current-time"></div>
 
-        <!-- Link truy cập Google Sheets -->
-        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTsT_bGLLTA96c3YEM7PFUloRXX4mEcVsfCiD8wLEUH6GRRHvSd2JZBuZxlRhIGuSXpZbFkcGR2Qr2r/pubhtml" class="access-link">Truy Cập Google Sheets</a>
-
-        <!-- Excel Data Section -->
         <h2>Dữ liệu từ Excel</h2>
         <table id="excel-table"></table>
     </div>
 
-
- 
     <script>
-         Hàm kiểm tra mật khẩu
+        // Hàm kiểm tra mật khẩu
         function checkPassword() {
-            const passwordInput = document.getElementById('password').value;
-            const correctPassword = '110405';  // Thay mật khẩu này theo ý muốn
-           const loginMessage = document.getElementById('login-message');
-            
-         if (passwordInput === correctPassword) {
-               document.getElementById('login-screen').style.display = 'none'; // Ẩn màn hình đăng nhập
-                document.getElementById('main-screen').style.display = 'block'; // Hiện màn hình chính
-               updateTime(); // Hiển thị thời gian thực
-               renderExcelData(); // Hiển thị dữ liệu Excel
+            const password = document.getElementById('password').value;
+            const correctPassword = '110405';
+            const loginMessage = document.getElementById('login-message');
+
+            if (password === correctPassword) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-screen').style.display = 'block';
+                updateTime();
+                renderExcelData();
             } else {
-                loginMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-       }
-       }
-       
-  
-
-
-
-        // Hàm cập nhật thời gian thực
-        function updateTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = now.getFullYear();
-            document.getElementById('current-time').textContent = `Ngày: ${day}/${month}/${year} - Giờ: ${hours}:${minutes}:${seconds}`;
+                loginMessage.textContent = 'Mật khẩu không đúng!';
+            }
         }
 
-        setInterval(updateTime, 1000); // Cập nhật thời gian mỗi giây
+        // Cập nhật thời gian thực
+        function updateTime() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('current-time').textContent =
+                    `Ngày: ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} - Giờ: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            }, 1000);
+        }
 
-        // Fetch and render the Excel data
+        // Xử lý gửi form
+        document.getElementById('overtimeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const data = {
+                "Mã NV": document.getElementById('employeeId').value,
+                "Họ Và Tên": document.getElementById('fullName').value,
+                "Số giờ tăng ca": document.getElementById('overtimeHours').value,
+                "Ca làm": document.getElementById('shift').value,
+            };
+
+            fetch('https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Dữ liệu đã được nhập!');
+                } else {
+                    alert('Lỗi khi nhập dữ liệu!');
+                }
+            })
+            .catch(error => alert('Lỗi: ' + error));
+        });
+
+        // Lấy dữ liệu từ Excel
         function renderExcelData() {
-            const excelUrl = 'URL_TO_YOUR_EXCEL_FILE.xlsx'; // Replace with your Excel file URL
+            const excelUrl = 'URL_TO_YOUR_EXCEL_FILE.xlsx'; // Thay bằng link file Excel hợp lệ
+
             fetch(excelUrl)
                 .then(response => response.arrayBuffer())
                 .then(data => {
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                    
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
                     const table = document.getElementById('excel-table');
-                    table.innerHTML = ''; // Clear existing table data
-                    
-                    jsonData.forEach((row, rowIndex) => {
-                        const tr = document.createElement('tr');
-                        row.forEach(cell => {
-                            const cellElement = rowIndex === 0 ? document.createElement('th') : document.createElement('td');
-                            cellElement.textContent = cell || '';
-                            tr.appendChild(cellElement);
-                        });
-                        table.appendChild(tr);
-                    });
+                    table.innerHTML = jsonData.map(row =>
+                        `<tr>${row.map(cell => `<td>${cell || ''}</td>`).join('')}</tr>`
+                    ).join('');
                 })
-                .catch(error => console.error('Error fetching or parsing the Excel file:', error));
+                .catch(error => console.error('Lỗi tải Excel:', error));
         }
-
-        // Xử lý sự kiện khi form được gửi
-        document.getElementById('overtimeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const webhookUrl = 'https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7'; // Thay thế bằng URL webhook của bạn
-            const formData = new FormData(event.target);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Dữ liệu đã được nhập thành công!');
-                    event.target.reset();
-                } else {
-                    alert('Có lỗi xảy ra khi nhập dữ liệu.');
-                }
-            })
-            .catch(error => {
-                alert('Có lỗi xảy ra: ' + error.message);
-            });
-        });
     </script>
+
 </body>
 </html>
