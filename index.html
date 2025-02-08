@@ -23,46 +23,54 @@
             width: 100%;
             max-width: 400px;
         }
-        h1, h2 {
+        .lock-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .lock-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 20px;
         }
-        label, input, select, button {
-            width: 100%;
-            display: block;
-            margin-bottom: 10px;
+        .lock-box input {
+            width: 80%;
             padding: 10px;
-            font-size: 14px;
+            margin-top: 10px;
         }
-        button {
-            background-color: #4CAF50;
+        .lock-box button {
+            margin-top: 10px;
+            padding: 10px;
+            background: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #45a049;
-        }
-        #current-time {
-            text-align: center;
-            font-size: 16px;
-            margin-top: 15px;
-        }
-        #excel-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        #excel-table th, #excel-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        #excel-table th {
-            background-color: #f4f4f4;
+        .info-box {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-box">
+            <h2>Nhập Mật Khẩu</h2>
+            <input type="password" id="passwordInput" placeholder="Nhập mật khẩu">
+            <button onclick="checkPassword()">Xác nhận</button>
+        </div>
+    </div>
+
+    <div class="info-box">🔔 Thông báo: Hệ thống đang hoạt động bình thường</div>
 
     <div class="container">
         <h1>Nhập Dữ liệu Tăng ca</h1>
@@ -73,98 +81,32 @@
                 <option value="20210041">20210041</option>
                 <option value="20210018">20210018</option>
             </select>
-
             <label for="fullName">Họ Và Tên:</label>
             <select id="fullName">
                 <option value="Võ Trung Anh Vũ">Võ Trung Anh Vũ</option>
                 <option value="Lê Nguyễn Mỹ Phụng">Lê Nguyễn Mỹ Phụng</option>
                 <option value="Lê Thanh Xuân">Lê Thanh Xuân</option>
             </select>
-
             <label for="overtimeHours">Số giờ tăng ca:</label>
             <select id="overtimeHours">
                 <option value="0.5">0.5 giờ</option>
                 <option value="1">1 giờ</option>
-                <option value="1.5">1.5 giờ</option>
                 <option value="2">2 giờ</option>
-                <option value="3">3 giờ</option>
             </select>
-
-            <label for="shift">Ca làm:</label>
-            <select id="shift">
-                <option value="Ca 1">Ca 1</option>
-                <option value="Ca 2">Ca 2</option>
-                <option value="Ca 3">Ca 3</option>
-                <option value="Hành Chánh">Hành Chánh</option>
-            </select>
-
             <button type="submit">Nhập Dữ liệu</button>
         </form>
-
         <div id="current-time"></div>
-
-        <h2>Dữ liệu từ Excel</h2>
-        <table id="excel-table"></table>
     </div>
 
     <script>
-        // Cập nhật thời gian thực
-        function updateTime() {
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('current-time').textContent =
-                    `Ngày: ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} - Giờ: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-            }, 1000);
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === "1234") { // Đổi mật khẩu tại đây
+                document.getElementById('lockScreen').style.display = 'none';
+            } else {
+                alert("Sai mật khẩu! Hãy thử lại.");
+            }
         }
-
-        updateTime();
-
-        // Xử lý gửi form
-        document.getElementById('overtimeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const data = {
-                "Mã NV": document.getElementById('employeeId').value,
-                "Họ Và Tên": document.getElementById('fullName').value,
-                "Số giờ tăng ca": document.getElementById('overtimeHours').value,
-                "Ca làm": document.getElementById('shift').value,
-            };
-
-            fetch('https://hook.us2.make.com/r55ahr3g7nqakgcwqcre7wm2v2j2uvl7', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Dữ liệu đã được nhập!');
-                } else {
-                    alert('Lỗi khi nhập dữ liệu!');
-                }
-            })
-            .catch(error => alert('Lỗi: ' + error));
-        });
-
-        // Lấy dữ liệu từ Excel
-        function renderExcelData() {
-            const excelUrl = 'URL_TO_YOUR_EXCEL_FILE.xlsx'; // Thay bằng link file Excel hợp lệ
-
-            fetch(excelUrl)
-                .then(response => response.arrayBuffer())
-                .then(data => {
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-                    const table = document.getElementById('excel-table');
-                    table.innerHTML = jsonData.map(row =>
-                        `<tr>${row.map(cell => `<td>${cell || ''}</td>`).join('')}</tr>`
-                    ).join('');
-                })
-                .catch(error => console.error('Lỗi tải Excel:', error));
-        }
-
-        renderExcelData();
     </script>
-
 </body>
 </html>
