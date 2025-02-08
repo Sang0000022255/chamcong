@@ -15,7 +15,7 @@
             height: 100vh;
             margin: 0;
         }
-        .container, .login-box {
+        .container {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
@@ -64,17 +64,7 @@
 </head>
 <body>
 
-    <!-- Màn hình đăng nhập -->
-    <div id="login-screen" class="container">
-        <h2>Đăng Nhập</h2>
-        <label for="password">Mật khẩu:</label>
-        <input type="password" id="password" placeholder="Nhập mật khẩu">
-        <button onclick="checkPassword()">Đăng Nhập</button>
-        <p id="login-message" style="color: red; text-align: center;"></p>
-    </div>
-
-    <!-- Màn hình chính -->
-    <div id="main-screen" class="container" style="display: none;">
+    <div class="container">
         <h1>Nhập Dữ liệu Tăng ca</h1>
         <form id="overtimeForm">
             <label for="employeeId">Mã NV:</label>
@@ -118,22 +108,6 @@
     </div>
 
     <script>
-        // Hàm kiểm tra mật khẩu
-        function checkPassword() {
-            const password = document.getElementById('password').value;
-            const correctPassword = '110405';
-            const loginMessage = document.getElementById('login-message');
-
-            if (password === correctPassword) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-screen').style.display = 'block';
-                updateTime();
-                renderExcelData();
-            } else {
-                loginMessage.textContent = 'Mật khẩu không đúng!';
-            }
-        }
-
         // Cập nhật thời gian thực
         function updateTime() {
             setInterval(() => {
@@ -142,6 +116,8 @@
                     `Ngày: ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} - Giờ: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
             }, 1000);
         }
+
+        updateTime();
 
         // Xử lý gửi form
         document.getElementById('overtimeForm').addEventListener('submit', function(event) {
@@ -186,6 +162,8 @@
                 })
                 .catch(error => console.error('Lỗi tải Excel:', error));
         }
+
+        renderExcelData();
     </script>
 
 </body>
