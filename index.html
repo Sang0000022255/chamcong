@@ -121,12 +121,21 @@
 
     <script>
         function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            if (password === "1234") { 
-                document.getElementById('lockScreen').style.display = 'none';
-            } else {
-                alert("Sai mật khẩu! Hãy thử lại.");
-            }
+    const password = document.getElementById('passwordInput').value.trim(); // Loại bỏ khoảng trắng thừa
+    if (password === "1234") { 
+        document.getElementById('lockScreen').style.display = 'none';
+    } else {
+        alert("Sai mật khẩu! Hãy thử lại.");
+    }
+}
+
+// Bắt sự kiện nhấn Enter trên ô nhập mật khẩu
+document.getElementById('passwordInput').addEventListener('keypress', function(event) {
+    if (event.key === "Enter") {
+        checkPassword();
+    }
+});
+
         }
 
         document.getElementById('overtimeForm').addEventListener('submit', function(event) {
